@@ -15,7 +15,7 @@ import csv
 #-----------------------------------------Variable Definitions---------------------------------------------------------#
 max_iter=1000
 
-n_inf = 100
+n_inf = 500
 # set num cores to use
 num_inf_cores = multiprocessing.cpu_count()
 # Set number of initialization routines
@@ -27,11 +27,11 @@ sigma = 50
 # memory
 w = 15
 # Fix trace length for now
-T = 150
+T = 200
 # Number of traces per batch
-batch_size = n_inf
+batch_size = 100
 # Set transition rate matrix for system
-R = np.array([[-.008, .007, .005], [.007, -.015, .035], [.001, .008, -.04]]) * 10.2
+R = np.array([[-.008, .007, .005], [.007, -.015, .025], [.001, .008, -.03]]) * 10.2
 A = scipy.linalg.expm(R, q=None)
 print(A)
 # Set emission levels
@@ -42,7 +42,7 @@ K = len(v)
 pi = [.8, .1, .1]
 
 # Set test name
-test_name = "inf_300_noise_sensitivity"
+test_name = "inf_500_noise_sensitivity"
 # Set writepath for results
 outpath = '../results/decode_validation/'
 # Set project name (creates subfolder)
@@ -64,7 +64,7 @@ def runit(init_set):
     A_init = init_set[0]
     v_init = init_set[1]
     sigma_init = init_set[2]
-    A_list, v_list, logL_list, sigma_list = cpEM_viterbi_full(fluo_states, A_init, v_init, sigma_init, pi, w=w, use_viterbi=0,estimate_noise=1, n_groups=5, max_stack=100, max_iter=max_iter, eps=10e-4)
+    A_list, v_list, logL_list, sigma_list = cpEM_viterbi_full(fluo_states, A_init, v_init, sigma_init, pi, w=w, use_viterbi=0,estimate_noise=0, n_groups=5, max_stack=100, max_iter=max_iter, eps=10e-4)
     return np.exp(A_list[-1]), v_list[-1], logL_list[-1], sigma_list[-1]
 
 
@@ -114,15 +114,15 @@ if __name__ == "__main__":
     print(best_results)
     """
     # -------------------------------------Generate Initialization Values----------------------------------------------#
-    v_prior = np.array([   0.47931526,   48.82100664,  120.59069231])
-    A_prior = np.array([[  9.13670345e-01,   8.41892883e-02,   1.17647059e-12],
-                        [  8.63296547e-02,   8.32355099e-01,   5.34117647e-01],
-                        [  1.77999288e-13,   8.34556126e-02,   4.65882353e-01]])
-    sigma_prior = 44.46
+    v_prior = np.array([   0,   40.0,  80.0])
+    A_prior = np.array([[ .8,   .1,   .1],
+                        [ .1,   .8,   .1],
+                        [ .1,   .1,   .8]])
+    sigma_prior = 49.0
     init_list = []
     for i in xrange(n_inf):
-        deltaA = (np.random.rand(K,K) - .5) * A_prior * .25
-        deltaV = (np.random.rand(K) - .5) * v_prior * .5
+        deltaA = (np.random.rand(K,K) - .5) * A_prior
+        deltaV = (np.random.rand(K) - .5) * v_prior
         v_init = v_prior + deltaV
         v_init[np.where(v_init < 0)[0]] = 0
 
@@ -177,8 +177,8 @@ if __name__ == "__main__":
                 writer = csv.writer(init_out)
                 results = init_list[tr]
                 A_flat = np.reshape(results[0], K ** 2).tolist()
-                v_best = results[1]
-                row = list(chain(*[A_flat, v_best.tolist(), [results[2]], pi]))
+                v_inf = results[1]
+                row = list(chain(*[A_flat, v_inf.tolist(), [results[2]], pi]))
                 writer.writerow(row)
 
     #save plots
