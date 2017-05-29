@@ -13,9 +13,11 @@ import os
 import csv
 
 #-----------------------------------------Variable Definitions---------------------------------------------------------#
+#Nax number of iterations permitted
 max_iter=1000
-
-n_inf = 500
+# Seconds per time step
+dt = 10.2
+n_inf = 100
 # set num cores to use
 num_inf_cores = multiprocessing.cpu_count()
 # Set number of initialization routines
@@ -28,21 +30,32 @@ sigma = 50
 w = 15
 # Fix trace length for now
 T = 200
+#Num states
+K = 2
 # Number of traces per batch
 batch_size = 100
 # Set transition rate matrix for system
-R = np.array([[-.008, .007, .005], [.007, -.015, .025], [.001, .008, -.03]]) * 10.2
+if K == 3:
+    R = np.array([[-.008, .007, .005], [.007, -.015, .025], [.001, .008, -.03]]) * dt
+elif K == 2:
+    R = np.array([[-.008, .010], [.008, -.010]]) * dt
+
 A = scipy.linalg.expm(R, q=None)
 print(A)
 # Set emission levels
-v = np.array([0.0, 50.0, 100.0])
-# State count
-K = len(v)
+if K == 3:
+    v = np.array([0.0, 25.0, 50.0])
+elif K == 2:
+    v = np.array([0.0,25.0])
+
 # Initial stat pdf
-pi = [.8, .1, .1]
+if K == 3:
+    pi = [.8,.1,.1]
+elif K == 2:
+    pi = [.8, .2]
 
 # Set test name
-test_name = "inf_500_noise_sensitivity"
+test_name = "inf_500_noise_2state_sensitivity"
 # Set writepath for results
 outpath = '../results/decode_validation/'
 # Set project name (creates subfolder)
@@ -64,7 +77,7 @@ def runit(init_set):
     A_init = init_set[0]
     v_init = init_set[1]
     sigma_init = init_set[2]
-    A_list, v_list, logL_list, sigma_list = cpEM_viterbi_full(fluo_states, A_init, v_init, sigma_init, pi, w=w, use_viterbi=0,estimate_noise=0, n_groups=5, max_stack=100, max_iter=max_iter, eps=10e-4)
+    A_list, v_list, logL_list, sigma_list = cpEM_viterbi_full(fluo_states, A_init, v_init, sigma_init, pi, w=w, use_viterbi=0,estimate_noise=1, n_groups=5, max_stack=1000, max_iter=max_iter, eps=10e-4)
     return np.exp(A_list[-1]), v_list[-1], logL_list[-1], sigma_list[-1]
 
 
@@ -114,10 +127,15 @@ if __name__ == "__main__":
     print(best_results)
     """
     # -------------------------------------Generate Initialization Values----------------------------------------------#
-    v_prior = np.array([   0,   40.0,  80.0])
-    A_prior = np.array([[ .8,   .1,   .1],
+    if K == 3:
+        v_prior = np.array([   0,   40.0,  80.0])
+        A_prior = np.array([[ .8,   .1,   .1],
                         [ .1,   .8,   .1],
                         [ .1,   .1,   .8]])
+    elif K == 2:
+        v_prior = [0,20]
+        A_prior = np.array([[.8, .2],
+                            [.2, .8]])
     sigma_prior = 49.0
     init_list = []
     for i in xrange(n_inf):
