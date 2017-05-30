@@ -15,13 +15,30 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="test_model.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../all_the_stripes/all_the_stripes_src/pulse_model/test_model.py">
+      <file leaf-file-name="HMMBasic.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/HMMBasic.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="5100">
               <caret line="204" column="25" lean-forward="false" selection-start-line="185" selection-start-column="0" selection-end-line="204" selection-end-column="25" />
+=======
+            <state relative-caret-position="646">
+              <caret line="207" column="37" lean-forward="true" selection-start-line="114" selection-start-column="0" selection-end-line="207" selection-end-column="37" />
+>>>>>>> 30127087cd6de5327b0276ede8ae84bf6e9289f6
               <folding>
-                <element signature="e#0#33#0" expanded="true" />
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="functions.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/utilities/functions.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="526">
+              <caret line="429" column="4" lean-forward="false" selection-start-line="429" selection-start-column="4" selection-end-line="444" selection-end-column="40" />
+              <folding>
+                <element signature="e#7789#9250#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -30,8 +47,13 @@
       <file leaf-file-name="cpHMM_viterbi.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utilities/cpHMM_viterbi.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="125">
               <caret line="5" column="1" lean-forward="false" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
+=======
+            <state relative-caret-position="60">
+              <caret line="121" column="66" lean-forward="true" selection-start-line="121" selection-start-column="66" selection-end-line="121" selection-end-column="66" />
+>>>>>>> 30127087cd6de5327b0276ede8ae84bf6e9289f6
               <folding>
                 <element signature="e#537#4702#0" expanded="false" />
               </folding>
@@ -54,7 +76,11 @@
       <file leaf-file-name="stack_decoder.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utilities/stack_decoder.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="1175">
+=======
+            <state relative-caret-position="705">
+>>>>>>> 30127087cd6de5327b0276ede8ae84bf6e9289f6
               <caret line="47" column="28" lean-forward="false" selection-start-line="47" selection-start-column="28" selection-end-line="47" selection-end-column="28" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
@@ -78,12 +104,33 @@
       <file leaf-file-name="cp_decode_testing.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cp_decode_testing.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="450">
               <caret line="55" column="18" lean-forward="false" selection-start-line="55" selection-start-column="18" selection-end-line="55" selection-end-column="18" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
                 <element signature="e#2031#2384#0" expanded="false" />
                 <element signature="e#3708#4771#1" expanded="false" />
+=======
+            <state relative-caret-position="780">
+              <caret line="52" column="19" lean-forward="true" selection-start-line="52" selection-start-column="19" selection-end-line="52" selection-end-column="19" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+                <element signature="e#1884#2237#0" expanded="false" />
+                <element signature="e#3542#4605#1" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="cpHMM_BW.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/utilities/cpHMM_BW.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="5490">
+              <caret line="366" column="12" lean-forward="true" selection-start-line="366" selection-start-column="12" selection-end-line="366" selection-end-column="12" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+>>>>>>> 30127087cd6de5327b0276ede8ae84bf6e9289f6
               </folding>
             </state>
           </provider>
@@ -116,7 +163,11 @@
         <option value="$PROJECT_DIR$/utilities/stack_decoder.py" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/utilities/cpHMM_viterbi.py" />
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/utilities/functions.py" />
+=======
+        <option value="$PROJECT_DIR$/utilities/cpHMM_BW.py" />
+>>>>>>> 30127087cd6de5327b0276ede8ae84bf6e9289f6
         <option value="$PROJECT_DIR$/cp_decode_testing.py" />
       </list>
     </option>
@@ -399,6 +450,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/cp_decode_testing.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3550">
@@ -434,20 +486,50 @@
           <caret line="33" column="65" lean-forward="false" selection-start-line="33" selection-start-column="65" selection-end-line="33" selection-end-column="65" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
+=======
+    <entry file="file://$PROJECT_DIR$/../../all_the_stripes/all_the_stripes_src/pulse_model/test_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="855">
+          <caret line="204" column="27" lean-forward="true" selection-start-line="185" selection-start-column="16" selection-end-line="204" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+>>>>>>> 30127087cd6de5327b0276ede8ae84bf6e9289f6
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/HMMBasic.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="90">
           <caret line="6" column="25" lean-forward="false" selection-start-line="6" selection-start-column="25" selection-end-line="6" selection-end-column="25" />
+=======
+        <state relative-caret-position="646">
+          <caret line="207" column="37" lean-forward="true" selection-start-line="114" selection-start-column="0" selection-end-line="207" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utilities/functions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="526">
+          <caret line="429" column="4" lean-forward="false" selection-start-line="429" selection-start-column="4" selection-end-line="444" selection-end-column="40" />
+          <folding>
+            <element signature="e#7789#9250#0" expanded="false" />
+          </folding>
+>>>>>>> 30127087cd6de5327b0276ede8ae84bf6e9289f6
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/utilities/stack_decoder.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="1175">
+=======
+        <state relative-caret-position="705">
+>>>>>>> 30127087cd6de5327b0276ede8ae84bf6e9289f6
           <caret line="47" column="28" lean-forward="false" selection-start-line="47" selection-start-column="28" selection-end-line="47" selection-end-column="28" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
@@ -455,18 +537,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../all_the_stripes/all_the_stripes_src/pulse_model/test_model.py">
+    <entry file="file://$PROJECT_DIR$/utilities/cpHMM_viterbi.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="5100">
           <caret line="204" column="25" lean-forward="false" selection-start-line="185" selection-start-column="0" selection-end-line="204" selection-end-column="25" />
+=======
+        <state relative-caret-position="60">
+          <caret line="121" column="66" lean-forward="true" selection-start-line="121" selection-start-column="66" selection-end-line="121" selection-end-column="66" />
+>>>>>>> 30127087cd6de5327b0276ede8ae84bf6e9289f6
           <folding>
-            <element signature="e#0#33#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#535#4700#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utilities/cpHMM_viterbi.py">
+    <entry file="file://$PROJECT_DIR$/utilities/cpHMM_BW.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="125">
           <caret line="5" column="1" lean-forward="false" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
           <folding>
@@ -481,18 +570,33 @@
           <caret line="5" column="1" lean-forward="false" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
           <folding>
             <element signature="e#7791#9252#0" expanded="false" />
+=======
+        <state relative-caret-position="5490">
+          <caret line="366" column="12" lean-forward="true" selection-start-line="366" selection-start-column="12" selection-end-line="366" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+>>>>>>> 30127087cd6de5327b0276ede8ae84bf6e9289f6
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cp_decode_testing.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="450">
           <caret line="55" column="18" lean-forward="false" selection-start-line="55" selection-start-column="18" selection-end-line="55" selection-end-column="18" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
             <element signature="e#2031#2384#0" expanded="false" />
             <element signature="e#3708#4771#1" expanded="false" />
+=======
+        <state relative-caret-position="780">
+          <caret line="52" column="19" lean-forward="true" selection-start-line="52" selection-start-column="19" selection-end-line="52" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#1884#2237#0" expanded="false" />
+            <element signature="e#3542#4605#1" expanded="false" />
+>>>>>>> 30127087cd6de5327b0276ede8ae84bf6e9289f6
           </folding>
         </state>
       </provider>
