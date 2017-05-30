@@ -1,6 +1,6 @@
 import time
 import sys
-import scipy # various algorithms
+#import scipy # various algorithms
 from matplotlib import pyplot as plt
 import numpy as np
 from joblib import Parallel, delayed
@@ -14,34 +14,39 @@ import csv
 
 #-----------------------------------------Variable Definitions---------------------------------------------------------#
 #Nax number of iterations permitted
-max_iter=1000
+max_iter = 1000
 # Seconds per time step
 dt = 10.2
-n_inf = 100
+#number of independent inference steps
+n_inf = 2
 # set num cores to use
-num_inf_cores = multiprocessing.cpu_count()
+num_inf_cores = 1 #multiprocessing.cpu_count()
 # Set number of initialization routines
 n_init = 1
 # set num cores to use
 num_init_cores = multiprocessing.cpu_count()
 # noise
-sigma = 50
+sigma = 20
 # memory
 w = 15
 # Fix trace length for now
 T = 200
 #Num states
 K = 2
+#Estimate noise?
+estimate_noise = 1
 # Number of traces per batch
 batch_size = 100
+# Stack Size used by Stack search algorithm
+max_stack = 100
 # Set transition rate matrix for system
 if K == 3:
     R = np.array([[-.008, .007, .005], [.007, -.015, .025], [.001, .008, -.03]]) * dt
 elif K == 2:
-    R = np.array([[-.008, .010], [.008, -.010]]) * dt
+    R = np.array([[-.0039, .0145], [.0039, -.0145]]) * dt
 
-A = scipy.linalg.expm(R, q=None)
-print(A)
+#A = scipy.linalg.expm(R, q=None)
+#print(A)
 # Set emission levels
 if K == 3:
     v = np.array([0.0, 25.0, 50.0])
@@ -77,7 +82,7 @@ def runit(init_set, fluo,pi):
     A_init = init_set[0]
     v_init = init_set[1]
     sigma_init = init_set[2]
-    A_list, v_list, logL_list, sigma_list = cpEM_viterbi_full(fluo=fluo, A_init=A_init, v_init=v_init, noise_init=sigma_init, pi0=pi, w=w, use_viterbi=0,estimate_noise=0, n_groups=5, max_stack=100, max_iter=max_iter, eps=10e-4)
+    A_list, v_list, logL_list, sigma_list = cpEM_viterbi_full(fluo=fluo, A_init=A_init, v_init=v_init, noise_init=sigma_init, pi0=pi, w=w, use_viterbi=0,estimate_noise=estimate_noise, n_groups=5, max_stack=max_stack, max_iter=max_iter, eps=10e-4)
     return np.exp(A_list[-1]), v_list[-1], logL_list[-1], sigma_list[-1]
 
 if __name__ == "__main__":
@@ -127,7 +132,7 @@ if __name__ == "__main__":
     """
     # -------------------------------------Generate Initialization Values----------------------------------------------#
     if K == 3:
-        v_prior = np.array([   0,   40.0,  80.0])
+        v_prior = np.array([   0,   20,  40])
         A_prior = np.array([[ .8,   .1,   .1],
                         [ .1,   .8,   .1],
                         [ .1,   .1,   .8]])
@@ -135,7 +140,7 @@ if __name__ == "__main__":
         v_prior = [0,20]
         A_prior = np.array([[.8, .2],
                             [.2, .8]])
-    sigma_prior = 49.0
+    sigma_prior = 25
     init_list = []
     for i in xrange(n_inf):
         deltaA = (np.random.rand(K,K) - .5) * A_prior
@@ -156,7 +161,7 @@ if __name__ == "__main__":
     fluo_cp = [fluo_states] * n_inf
     inf_results = Parallel(n_jobs=num_inf_cores)(delayed(runit)(init_set=p0, fluo=f, pi=pi) for p0 in init_list for f in fluo_cp for pi in pi_list)
     print("Runtime: " + str(time.time() - init_time))
-
+    time_per_inf = (time.time() - init_time) / float(n_inf)
     #Find routine with highest likelihood score
     logL_list = np.array([inf_results[i][2] for i in xrange(n_inf)])
     max_id = np.argmax(logL_list)
@@ -189,7 +194,7 @@ if __name__ == "__main__":
                 results = inf_results[tr]
                 A_flat = np.reshape(results[0], K ** 2).tolist()
                 v_best = results[1]
-                row = list(chain(*[A_flat, v_best.tolist(), [results[2]], [results[3]], pi]))
+                row = list(chain(*[A_flat, v_best.tolist(), [results[2]], [results[3]], pi, [time_per_inf]]))
                 writer.writerow(row)
 
             with open(os.path.join(outpath, subfolder_name, test_name + '_initializations.csv'), write) as init_out:
