@@ -12,18 +12,20 @@ from utilities.stack_decoder import decode_cp
 import os
 import csv
 
-#-----------------------------------------Variable Definitions---------------------------------------------------------#
+#------------------------------------Routine Variable Definitions------------------------------------------------------#
 #Nax number of iterations permitted
 max_iter=1000
 # Seconds per time step
 dt = 10.2
-n_inf = 2
+n_inf = 300
 # set num cores to use
 num_inf_cores = multiprocessing.cpu_count()
 # Set number of initialization routines
 n_init = 1
 # set num cores to use
 num_init_cores = multiprocessing.cpu_count()
+
+#-------------------------------------"True" Variable Definitions------------------------------------------------------#
 # noise
 sigma = 25
 # memory
@@ -31,7 +33,7 @@ w = 15
 # Fix trace length for now
 T = 200
 #Num states
-K = 2
+K = 3
 # Number of traces per batch
 batch_size = 100
 # Set transition rate matrix for system
@@ -54,8 +56,26 @@ if K == 3:
 elif K == 2:
     pi = [.8, .2]
 
+#------------------------------------------Inference Init Variables----------------------------------------------------#
+if K == 3:
+    v_prior = np.array([   0,   20.0,  40.0])
+    A_prior = np.array([[ .8,   .1,   .1],
+                    [ .1,   .8,   .1],
+                    [ .1,   .1,   .8]])
+elif K == 2:
+    v_prior = [0,20]
+    A_prior = np.array([[.8, .2],
+                        [.2, .8]])
+sigma_prior = 30.0
+
+#Degree of flexibility to allow in param initiations (2 = +/- full variable value)
+A_temp = 1
+v_temp = 1
+sigma_temp = 1
+
+#-----------------------------------------------Write Paths------------------------------------------------------------#
 # Set test name
-test_name = "inf_300_noise_3state_sensitivity"
+test_name = "mike_params_3state_est_noise"
 # Set writepath for results
 outpath = '../results/decode_validation/'
 # Set project name (creates subfolder)
@@ -65,14 +85,8 @@ if not os.path.isdir(os.path.join(outpath, subfolder_name)):
 if not os.path.isdir(os.path.join(outpath, subfolder_name, 'plots')):
     os.makedirs(os.path.join(outpath, subfolder_name, 'plots'))
 
-def init(init_set):
-    A_init = init_set[0]
-    v_init = init_set[1]
-    sigma_init = init_set[2]
-    A_list, v_list, logL_list, sigma_list = cpEM_viterbi_full(slow_traces, A_init, v_init, sigma_init, pi, w=w / 5, estimate_noise=0, use_viterbi=1, n_groups=5, max_stack=100, max_iter=max_iter, eps=10e-4)
-    return np.exp(A_list[-1]), v_list[-1], logL_list[-1], sigma_list[-1]
 
-
+#Define function to call viterbi fit in parallel
 def runit(init_set, fluo,pi):
     A_init = init_set[0]
     v_init = init_set[1]
@@ -85,6 +99,13 @@ if __name__ == "__main__":
 
     print("Writing to: " + os.path.join(outpath, subfolder_name))
 
+    #Write true param values
+    with open(os.path.join(outpath, subfolder_name, test_name + '_true_values.csv'), 'wb') as inf_out:
+        writer = csv.writer(inf_out)
+        R_flat = np.reshape(R, K ** 2).tolist()
+        v_best = v
+        row = list(chain(*[R_flat, v_best.tolist(), [sigma], pi]))
+        writer.writerow(row)
     #------------------------------------------Generate Traces---------------------------------------------------------#
     promoter_states, fluo_states, promoter_states_discrete, fluo_states_nn = \
         generate_traces_gill(w, T, batch_size, r_mat=R, v=v, noise_level=sigma, alpha=0.0, pi0=pi)
@@ -126,27 +147,18 @@ if __name__ == "__main__":
     print(best_results)
     """
     # -------------------------------------Generate Initialization Values----------------------------------------------#
-    if K == 3:
-        v_prior = np.array([   0,   20.0,  40.0])
-        A_prior = np.array([[ .8,   .1,   .1],
-                        [ .1,   .8,   .1],
-                        [ .1,   .1,   .8]])
-    elif K == 2:
-        v_prior = [0,20]
-        A_prior = np.array([[.8, .2],
-                            [.2, .8]])
-    sigma_prior = 40.0
+
     init_list = []
     for i in xrange(n_inf):
-        deltaA = (np.random.rand(K,K) - .5) * A_prior
-        deltaV = (np.random.rand(K) - .5) * v_prior
+        deltaA = (np.random.rand(K,K) - .5) * A_prior * A_temp
+        deltaV = (np.random.rand(K) - .5) * v_prior * v_temp
         v_init = v_prior + deltaV
         v_init[np.where(v_init < 0)[0]] = 0
 
         A_init = deltaA + A_prior
         A_init = A_init / np.tile(np.sum(A_init,axis=0),(K,1))
 
-        sigma_init = sigma_prior + (np.random.rand()-.5)*sigma_prior*.5
+        sigma_init = sigma_prior + (np.random.rand()-.5)*sigma_prior*sigma_temp
         init_list.append([A_init, v_init, sigma_init])
 
     # -------------------------------------------Conduct Inference-----------------------------------------------------#
