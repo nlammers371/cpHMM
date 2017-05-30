@@ -1,6 +1,6 @@
 import time
 import sys
-import scipy # various algorithms
+#import scipy # various algorithms
 from matplotlib import pyplot as plt
 import numpy as np
 from joblib import Parallel, delayed
@@ -40,8 +40,8 @@ if K == 3:
 elif K == 2:
     R = np.array([[-.004, .014], [.004, -.014]]) * dt
 
-A = scipy.linalg.expm(R, q=None)
-print(A)
+#A = scipy.linalg.expm(R, q=None)
+#print(A)
 # Set emission levels
 if K == 3:
     v = np.array([0.0, 25.0, 50.0])
