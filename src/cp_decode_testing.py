@@ -1,6 +1,6 @@
 import time
 import sys
-import scipy # various algorithms
+#import scipy # various algorithms
 from matplotlib import pyplot as plt
 import numpy as np
 from joblib import Parallel, delayed
@@ -16,18 +16,21 @@ import csv
 #Nax number of iterations permitted
 max_iter=1000
 # Seconds per time step
-dt = 10.2
-n_inf = 300
+dt = 6.2
+n_inf = 100
 # set num cores to use
-num_inf_cores = multiprocessing.cpu_count()
+num_inf_cores = 16 #multiprocessing.cpu_count()
 # Set number of initialization routines
-n_init = 1
+#n_init = 1
 # set num cores to use
-num_init_cores = multiprocessing.cpu_count()
-
+#num_init_cores = multiprocessing.cpu_count()
+#Max num permitted paths in stack
+max_stack = 150
+#Estimate noise
+estimate_noise = 0
 #-------------------------------------"True" Variable Definitions------------------------------------------------------#
 # noise
-sigma = 25
+sigma = 12.5
 # memory
 w = 15
 # Fix trace length for now
@@ -38,12 +41,13 @@ K = 3
 batch_size = 100
 # Set transition rate matrix for system
 if K == 3:
-    R = np.array([[-.004, .009, .005], [.003, -.014, .015], [.001, .005, -.02]]) * dt
+    R = np.array([[-.006, .009, .005], [.004, -.014, .02], [.002, .005, -.025]]) * dt
+
 elif K == 2:
     R = np.array([[-.004, .014], [.004, -.014]]) * dt
 
-A = scipy.linalg.expm(R, q=None)
-print(A)
+#A = scipy.linalg.expm(R, q=None)
+#print(A)
 # Set emission levels
 if K == 3:
     v = np.array([0.0, 25.0, 50.0])
@@ -58,24 +62,24 @@ elif K == 2:
 
 #------------------------------------------Inference Init Variables----------------------------------------------------#
 if K == 3:
-    v_prior = np.array([   0,   20.0,  40.0])
+    v_prior = np.array([   0,   24.0,  51.0])
     A_prior = np.array([[ .8,   .1,   .1],
-                    [ .1,   .8,   .1],
-                    [ .1,   .1,   .8]])
+                        [ .1,   .8,   .1],
+                        [ .1,   .1,   .8]])
 elif K == 2:
-    v_prior = [0,20]
+    v_prior = [0,35]
     A_prior = np.array([[.8, .2],
                         [.2, .8]])
-sigma_prior = 30.0
+sigma_prior = 10
 
 #Degree of flexibility to allow in param initiations (2 = +/- full variable value)
 A_temp = 1
-v_temp = 1
-sigma_temp = 1
+v_temp = .25
+sigma_temp = 1.5
 
 #-----------------------------------------------Write Paths------------------------------------------------------------#
 # Set test name
-test_name = "mike_params_3state_est_noise"
+test_name = "mike_params_3state_low_noise_cold_m_stack150"
 # Set writepath for results
 outpath = '../results/decode_validation/'
 # Set project name (creates subfolder)
@@ -91,7 +95,7 @@ def runit(init_set, fluo,pi):
     A_init = init_set[0]
     v_init = init_set[1]
     sigma_init = init_set[2]
-    A_list, v_list, logL_list, sigma_list = cpEM_viterbi_full(fluo=fluo, A_init=A_init, v_init=v_init, noise_init=sigma_init, pi0=pi, w=w, use_viterbi=0,estimate_noise=1, n_groups=5, max_stack=100, max_iter=max_iter, eps=10e-4)
+    A_list, v_list, logL_list, sigma_list = cpEM_viterbi_full(fluo=fluo, A_init=A_init, v_init=v_init, noise_init=sigma_init, pi0=pi, w=w, use_viterbi=0,estimate_noise=estimate_noise, n_groups=5, max_stack=max_stack, max_iter=max_iter, eps=10e-4)
     return np.exp(A_list[-1]), v_list[-1], logL_list[-1], sigma_list[-1]
 
 if __name__ == "__main__":
