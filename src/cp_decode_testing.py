@@ -17,7 +17,7 @@ import csv
 max_iter=1000
 # Seconds per time step
 dt = 10.2
-n_inf = 100
+n_inf = 300
 # set num cores to use
 num_inf_cores = multiprocessing.cpu_count()
 # Set number of initialization routines
@@ -25,18 +25,18 @@ n_init = 1
 # set num cores to use
 num_init_cores = multiprocessing.cpu_count()
 # noise
-sigma = 50
+sigma = 25
 # memory
 w = 15
 # Fix trace length for now
 T = 200
 #Num states
-K = 2
+K = 3
 # Number of traces per batch
 batch_size = 100
 # Set transition rate matrix for system
 if K == 3:
-    R = np.array([[-.008, .007, .005], [.007, -.015, .025], [.001, .008, -.03]]) * dt
+    R = np.array([[-.004, .009, .005], [.003, -.014, .015], [.001, .005, -.02]]) * dt
 elif K == 2:
     R = np.array([[-.008, .010], [.008, -.010]]) * dt
 
@@ -55,7 +55,7 @@ elif K == 2:
     pi = [.8, .2]
 
 # Set test name
-test_name = "inf_500_noise_2state_sensitivity"
+test_name = "inf_300_noise_3state_sensitivity"
 # Set writepath for results
 outpath = '../results/decode_validation/'
 # Set project name (creates subfolder)
@@ -77,7 +77,7 @@ def runit(init_set, fluo,pi):
     A_init = init_set[0]
     v_init = init_set[1]
     sigma_init = init_set[2]
-    A_list, v_list, logL_list, sigma_list = cpEM_viterbi_full(fluo=fluo, A_init=A_init, v_init=v_init, noise_init=sigma_init, pi0=pi, w=w, use_viterbi=0,estimate_noise=0, n_groups=5, max_stack=100, max_iter=max_iter, eps=10e-4)
+    A_list, v_list, logL_list, sigma_list = cpEM_viterbi_full(fluo=fluo, A_init=A_init, v_init=v_init, noise_init=sigma_init, pi0=pi, w=w, use_viterbi=0,estimate_noise=1, n_groups=5, max_stack=100, max_iter=max_iter, eps=10e-4)
     return np.exp(A_list[-1]), v_list[-1], logL_list[-1], sigma_list[-1]
 
 if __name__ == "__main__":
@@ -127,7 +127,7 @@ if __name__ == "__main__":
     """
     # -------------------------------------Generate Initialization Values----------------------------------------------#
     if K == 3:
-        v_prior = np.array([   0,   40.0,  80.0])
+        v_prior = np.array([   0,   20.0,  40.0])
         A_prior = np.array([[ .8,   .1,   .1],
                         [ .1,   .8,   .1],
                         [ .1,   .1,   .8]])
@@ -135,7 +135,7 @@ if __name__ == "__main__":
         v_prior = [0,20]
         A_prior = np.array([[.8, .2],
                             [.2, .8]])
-    sigma_prior = 49.0
+    sigma_prior = 40.0
     init_list = []
     for i in xrange(n_inf):
         deltaA = (np.random.rand(K,K) - .5) * A_prior
@@ -208,7 +208,7 @@ if __name__ == "__main__":
         ax.plot(f_out[tr], c='b', label='Predicted')
 
         # plt.legend()
-        fig_fluo.savefig(os.path.join(outpath, subfolder_name, 'plots', 'f_trajectory' + "_" + str(tr) + ".png"))
+        fig_fluo.savefig(os.path.join(outpath, subfolder_name, 'plots', 'tr' + "_" + str(tr) + "_fluo.png"))
         plt.close()
 
         fig_prom = plt.figure(figsize=(12, 4))
@@ -217,7 +217,7 @@ if __name__ == "__main__":
         ax.plot(v_out[tr], c='b', label='Predicted')
         plt.ylim([0, 1.1 * np.max(v)])
         # plt.legend()
-        fig_prom.savefig(os.path.join(outpath, subfolder_name, 'plots', 'p_trajectory' + "_" + str(tr) + ".png"))
+        fig_prom.savefig(os.path.join(outpath, subfolder_name, 'plots', 'tr' + "_" + str(tr) + "_promoter.png"))
         plt.close()
 
 
