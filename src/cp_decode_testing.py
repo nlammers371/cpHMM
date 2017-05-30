@@ -73,13 +73,12 @@ def init(init_set):
     return np.exp(A_list[-1]), v_list[-1], logL_list[-1], sigma_list[-1]
 
 
-def runit(init_set):
+def runit(init_set, fluo,pi):
     A_init = init_set[0]
     v_init = init_set[1]
     sigma_init = init_set[2]
-    A_list, v_list, logL_list, sigma_list = cpEM_viterbi_full(fluo_states, A_init, v_init, sigma_init, pi, w=w, use_viterbi=0,estimate_noise=1, n_groups=5, max_stack=1000, max_iter=max_iter, eps=10e-4)
+    A_list, v_list, logL_list, sigma_list = cpEM_viterbi_full(fluo=fluo, A_init=A_init, v_init=v_init, noise_init=sigma_init, pi0=pi, w=w, use_viterbi=0,estimate_noise=0, n_groups=5, max_stack=100, max_iter=max_iter, eps=10e-4)
     return np.exp(A_list[-1]), v_list[-1], logL_list[-1], sigma_list[-1]
-
 
 if __name__ == "__main__":
     #Set number of inference routines
@@ -153,12 +152,14 @@ if __name__ == "__main__":
     # -------------------------------------------Conduct Inference-----------------------------------------------------#
     print("Running EM Optimization...")
     init_time = time.time()
-    inf_results = Parallel(n_jobs=num_inf_cores)(delayed(runit)(init_list[i]) for i in range(n_inf))
+    pi_list = [pi] * n_inf
+    fluo_cp = [fluo_states] * n_inf
+    inf_results = Parallel(n_jobs=num_inf_cores)(delayed(runit)(init_set=p0, fluo=f, pi=pi) for p0 in init_list for f in fluo_cp for pi in pi_list)
     print("Runtime: " + str(time.time() - init_time))
 
     #Find routine with highest likelihood score
     logL_list = np.array([inf_results[i][2] for i in xrange(n_inf)])
-    max_id = np.where(logL_list==np.max(logL_list))[0]
+    max_id = np.argmax(logL_list)
     best_results = inf_results[max_id]
     A_inf = best_results[0]
     v_inf = best_results[1]

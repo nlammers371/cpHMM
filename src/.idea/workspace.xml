@@ -67,12 +67,12 @@
       <file leaf-file-name="cp_decode_testing.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cp_decode_testing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="525">
-              <caret line="35" column="16" lean-forward="false" selection-start-line="35" selection-start-column="16" selection-end-line="35" selection-end-column="16" />
+            <state relative-caret-position="630">
+              <caret line="172" column="22" lean-forward="false" selection-start-line="172" selection-start-column="22" selection-end-line="172" selection-end-column="22" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
                 <element signature="e#1886#2239#0" expanded="false" />
-                <element signature="e#3510#4573#1" expanded="false" />
+                <element signature="e#3544#4607#1" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -426,12 +426,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cp_decode_testing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="35" column="16" lean-forward="false" selection-start-line="35" selection-start-column="16" selection-end-line="35" selection-end-column="16" />
+        <state relative-caret-position="630">
+          <caret line="172" column="22" lean-forward="false" selection-start-line="172" selection-start-column="22" selection-end-line="172" selection-end-column="22" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
             <element signature="e#1886#2239#0" expanded="false" />
-            <element signature="e#3510#4573#1" expanded="false" />
+            <element signature="e#3544#4607#1" expanded="false" />
           </folding>
         </state>
       </provider>
