@@ -17,7 +17,7 @@ import csv
 max_iter=1000
 # Seconds per time step
 dt = 10.2
-n_inf = 300
+n_inf = 2
 # set num cores to use
 num_inf_cores = multiprocessing.cpu_count()
 # Set number of initialization routines
@@ -31,14 +31,14 @@ w = 15
 # Fix trace length for now
 T = 200
 #Num states
-K = 3
+K = 2
 # Number of traces per batch
 batch_size = 100
 # Set transition rate matrix for system
 if K == 3:
     R = np.array([[-.004, .009, .005], [.003, -.014, .015], [.001, .005, -.02]]) * dt
 elif K == 2:
-    R = np.array([[-.008, .010], [.008, -.010]]) * dt
+    R = np.array([[-.004, .014], [.004, -.014]]) * dt
 
 A = scipy.linalg.expm(R, q=None)
 print(A)
@@ -154,7 +154,7 @@ if __name__ == "__main__":
     init_time = time.time()
     pi_list = [pi] * n_inf
     fluo_cp = [fluo_states] * n_inf
-    inf_results = Parallel(n_jobs=num_inf_cores)(delayed(runit)(init_set=p0, fluo=f, pi=pi) for p0 in init_list for f in fluo_cp for pi in pi_list)
+    inf_results = Parallel(n_jobs=num_inf_cores)(delayed(runit)(init_set=p0, fluo=fluo_states, pi=pi) for p0 in init_list)
     print("Runtime: " + str(time.time() - init_time))
 
     #Find routine with highest likelihood score
