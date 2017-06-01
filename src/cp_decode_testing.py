@@ -16,8 +16,8 @@ import csv
 #Nax number of iterations permitted
 max_iter=1000
 # Seconds per time step
-dt = 6.2
-n_inf = 100
+dt = 5.1
+n_inf = 500
 # set num cores to use
 num_inf_cores = 16 #multiprocessing.cpu_count()
 # Set number of initialization routines
@@ -25,14 +25,14 @@ num_inf_cores = 16 #multiprocessing.cpu_count()
 # set num cores to use
 #num_init_cores = multiprocessing.cpu_count()
 #Max num permitted paths in stack
-max_stack = 100
+max_stack = 250
 #Estimate noise
 estimate_noise = 0
 #-------------------------------------"True" Variable Definitions------------------------------------------------------#
 # noise
 sigma = 25
 # memory
-w = 15
+w = 30
 # Fix trace length for now
 T = 200
 #Num states
@@ -52,7 +52,7 @@ elif K == 2:
 if K == 3:
     v = np.array([0.0, 25.0, 50.0])
 elif K == 2:
-    v = np.array([0.0,25.0])
+    v = np.array([0.0, 25.0])
 
 # Initial stat pdf
 if K == 3:
@@ -62,30 +62,32 @@ elif K == 2:
 
 #------------------------------------------Inference Init Variables----------------------------------------------------#
 if K == 3:
-    v_prior = np.array([   0,   24.0,  51.0])
-    A_prior = np.array([[ .9,   .15,   .1],
+    v_prior = np.array([   0,   20.0,  55.0])
+    A_prior = np.array([[ .9,   .07,   .1],
                         [ .05,   .85,   .1],
-                        [ .05,   .1,   .8]])
+                        [ .05,   .08,   .8]])
 elif K == 2:
     v_prior = [0,35]
     A_prior = np.array([[.8, .2],
                         [.2, .8]])
-sigma_prior = 10
+sigma_prior = 35
 
 #Degree of flexibility to allow in param initiations (2 = +/- full variable value)
-A_temp = 1
-v_temp = .25
-sigma_temp = 0
+A_temp = 2
+v_temp = 1
+sigma_temp = 1
 
 #-----------------------------------------------Write Paths------------------------------------------------------------#
 # Set test name
-test_name = "mike_params_3state_min_noise_cold"
+test_name = "mike_params_3state_fullstop_w30_t5_stack250"
 # Set writepath for results
 outpath = '../results/decode_validation/'
 # Set project name (creates subfolder)
 subfolder_name = test_name
-if not os.path.isdir(os.path.join(outpath, subfolder_name)):
-    os.makedirs(os.path.join(outpath, subfolder_name))
+writepath = os.path.join(outpath, subfolder_name)
+if not os.path.isdir(outpath):
+    os.makedirs(writepath)
+
 if not os.path.isdir(os.path.join(outpath, subfolder_name, 'plots')):
     os.makedirs(os.path.join(outpath, subfolder_name, 'plots'))
 
@@ -183,7 +185,7 @@ if __name__ == "__main__":
     print(best_results)
 
     print("Running Stack Decoder to Fit Traces...")
-    seq_out, f_out, v_out, logL_out = decode_cp(fluo_states, np.log(A_inf), np.log(pi), v_inf, w, sigma, stack_depth=100)
+    seq_out, f_out, v_out, logL_out = decode_cp(fluo_states, np.log(A_inf), np.log(pi), v_inf, w, sigma, stack_depth=max_stack)
 
     # Write best param estimates to csv
     with open(os.path.join(outpath, subfolder_name, test_name + '_best_results.csv'), 'wb') as inf_out:
