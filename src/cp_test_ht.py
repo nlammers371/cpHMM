@@ -1,7 +1,6 @@
 import time
 import sys
 #import scipy # various algorithms
-from matplotlib import pyplot as plt
 import numpy as np
 from joblib import Parallel, delayed
 import multiprocessing
@@ -13,10 +12,11 @@ import os
 import csv
 
 #------------------------------------Routine Variable Definitions------------------------------------------------------#
-#Nax number of iterations permitted
+#Max number of iterations permitted
 max_iter=1000
 # Seconds per time step
 dt = 5.1
+#N Separate Inferences
 n_inf = 500
 # set num cores to use
 num_inf_cores = 16 #multiprocessing.cpu_count()
@@ -125,33 +125,6 @@ if __name__ == "__main__":
         #f_slow =  np.interp(slow_tp, range(T), fluo, left=None, right=None, period=None)
         slow_traces.append(fluo_arr[slow_tp])
 
-    # ----------------------------------Use VT fitting to Estimate Init Values-----------------------------------------#
-    """
-    v_raw = np.array([0,50,100])
-    A_raw = A_prior = np.array([[.8,.1,.1],[.1,.8,.1],[.3,.2,.5]])
-    sigma_raw = 25
-    raw_init_list = []
-    for i in xrange(n_init):
-        deltaA = (np.random.rand(K, K) - .5) * A_raw * 2
-        deltaV = np.random.rand(K)  * v_raw * 10
-        v_init = v_raw + deltaV
-        v_init[np.where(v_init < 0)[0]] = 0
-
-        A_init = deltaA + A_prior
-        A_init = A_init / np.tile(np.sum(A_init, axis=0), (K, 1))
-
-        sigma_init = sigma_raw + (np.random.rand() - .5) * sigma_raw * 2
-        raw_init_list.append([A_init, v_init, sigma_init])
-
-    print("Running Initial VT Param Estimation...")
-    init_time = time.time()
-    init_results = Parallel(n_jobs=num_init_cores)(delayed(init)(raw_init_list[i]) for i in range(n_init))
-    print("Runtime (unit): " + str(time.time() - init_time))
-    init_logL_list = np.array([init_results[i][2] for i in xrange(n_inf)])
-    init_max_id = np.where(init_logL_list == np.max(init_logL_list))[0]
-    best_results = init_results[init_max_id]
-    print(best_results)
-    """
     # -------------------------------------Generate Initialization Values----------------------------------------------#
 
     init_list = []
@@ -196,15 +169,15 @@ if __name__ == "__main__":
         writer.writerow(row)
 
         # write full inference results to csv
-        for tr in xrange(n_inf):
-            if tr == 0:
+        for n in xrange(n_inf):
+            if n == 0:
                 write = 'wb'
             else:
                 write = 'a'
 
             with open(os.path.join(outpath, subfolder_name, test_name + '_full_results.csv'), write) as full_out:
                 writer = csv.writer(full_out)
-                results = inf_results[tr]
+                results = inf_results[n]
                 A_flat = np.reshape(results[0], K ** 2).tolist()
                 v_best = results[1]
                 row = list(chain(*[A_flat, v_best.tolist(), [results[2]], [results[3]], pi]))
@@ -212,31 +185,8 @@ if __name__ == "__main__":
 
             with open(os.path.join(outpath, subfolder_name, test_name + '_initializations.csv'), write) as init_out:
                 writer = csv.writer(init_out)
-                results = init_list[tr]
+                results = init_list[n]
                 A_flat = np.reshape(results[0], K ** 2).tolist()
                 v_inf = results[1]
                 row = list(chain(*[A_flat, v_inf.tolist(), [results[2]], pi]))
                 writer.writerow(row)
-
-    #save plots
-    for tr in xrange(batch_size):
-        fig_fluo = plt.figure(figsize=(12, 4))
-        ax = plt.subplot(1, 1, 1)
-        ax.plot(fluo_states[tr], c='g', alpha=0.4, label='Actual')
-        ax.plot(f_out[tr], c='b', label='Predicted')
-
-        # plt.legend()
-        fig_fluo.savefig(os.path.join(outpath, subfolder_name, 'plots', 'tr' + "_" + str(tr) + "_fluo.png"))
-        plt.close()
-
-        fig_prom = plt.figure(figsize=(12, 4))
-        ax = plt.subplot(1, 1, 1)
-        ax.plot(promoter_states[tr], c='g', alpha=0.4, label='Actual')
-        ax.plot(v_out[tr], c='b', label='Predicted')
-        plt.ylim([0, 1.1 * np.max(v)])
-        # plt.legend()
-        fig_prom.savefig(os.path.join(outpath, subfolder_name, 'plots', 'tr' + "_" + str(tr) + "_promoter.png"))
-        plt.close()
-
-
-
