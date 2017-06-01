@@ -25,12 +25,12 @@ num_inf_cores = 16 #multiprocessing.cpu_count()
 # set num cores to use
 #num_init_cores = multiprocessing.cpu_count()
 #Max num permitted paths in stack
-max_stack = 150
+max_stack = 100
 #Estimate noise
 estimate_noise = 0
 #-------------------------------------"True" Variable Definitions------------------------------------------------------#
 # noise
-sigma = 12.5
+sigma = 25
 # memory
 w = 15
 # Fix trace length for now
@@ -63,9 +63,9 @@ elif K == 2:
 #------------------------------------------Inference Init Variables----------------------------------------------------#
 if K == 3:
     v_prior = np.array([   0,   24.0,  51.0])
-    A_prior = np.array([[ .8,   .1,   .1],
-                        [ .1,   .8,   .1],
-                        [ .1,   .1,   .8]])
+    A_prior = np.array([[ .9,   .15,   .1],
+                        [ .05,   .85,   .1],
+                        [ .05,   .1,   .8]])
 elif K == 2:
     v_prior = [0,35]
     A_prior = np.array([[.8, .2],
@@ -75,11 +75,11 @@ sigma_prior = 10
 #Degree of flexibility to allow in param initiations (2 = +/- full variable value)
 A_temp = 1
 v_temp = .25
-sigma_temp = 1.5
+sigma_temp = 0
 
 #-----------------------------------------------Write Paths------------------------------------------------------------#
 # Set test name
-test_name = "mike_params_3state_low_noise_cold_m_stack150"
+test_name = "mike_params_3state_min_noise_cold"
 # Set writepath for results
 outpath = '../results/decode_validation/'
 # Set project name (creates subfolder)
