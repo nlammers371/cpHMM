@@ -1,7 +1,7 @@
 import time
 import sys
 #import scipy # various algorithms
-from matplotlib import pyplot as plt
+#from matplotlib import pyplot as plt
 import numpy as np
 from joblib import Parallel, delayed
 import multiprocessing
