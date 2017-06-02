@@ -13,7 +13,7 @@ import csv
 
 #------------------------------------Routine Variable Definitions------------------------------------------------------#
 #Max number of iterations permitted
-max_iter=1000
+max_iter = 1000
 # Seconds per time step
 dt = 5.1
 #N Separate Inferences
@@ -25,7 +25,7 @@ num_inf_cores = 16 #multiprocessing.cpu_count()
 # set num cores to use
 #num_init_cores = multiprocessing.cpu_count()
 #Max num permitted paths in stack
-max_stack = 250
+max_stack = 750
 #Estimate noise
 estimate_noise = 0
 #-------------------------------------"True" Variable Definitions------------------------------------------------------#
@@ -41,7 +41,10 @@ K = 3
 batch_size = 100
 # Set transition rate matrix for system
 if K == 3:
-    R = np.array([[-.006, .009, .005], [.004, -.014, .02], [.002, .005, -.025]]) * dt
+    R = np.array([[-.006, .009, .005],
+                  [.004, -.014, .02],
+                  [.002, .005, -.025]]) * dt
+
 
 elif K == 2:
     R = np.array([[-.004, .014], [.004, -.014]]) * dt
@@ -79,13 +82,13 @@ sigma_temp = 1
 
 #-----------------------------------------------Write Paths------------------------------------------------------------#
 # Set test name
-test_name = "mike_params_3state_fullstop_w30_t5_stack250"
+test_name = "mp_3state_fullstop_w30_t5_stack750"
 # Set writepath for results
 outpath = '../results/decode_validation/'
 # Set project name (creates subfolder)
 subfolder_name = test_name
 writepath = os.path.join(outpath, subfolder_name)
-if not os.path.isdir(outpath):
+if not os.path.isdir(writepath):
     os.makedirs(writepath)
 
 if not os.path.isdir(os.path.join(outpath, subfolder_name, 'plots')):
