@@ -1,7 +1,5 @@
 ('estimate_noise', 1)('v_prior', [0, 50.0])('n_inf', 5)('K', 2)('max_iter', 1000)('v_temp', 2)('max_stack', 5)('A_temp', 2)('sigma_prior', 50.0)('sigma_temp', 2)('A_prior', array([[ 0.8,  0.2],
        [ 0.2,  0.8]]))('num_inf_cores', 4)('estimate_noise', 1)('v_prior', [0, 50.0])('n_inf', 5)('K', 2)('max_iter', 1000)('v_temp', 2)('max_stack', 5)('A_temp', 2)('sigma_prior', 50.0)('sigma_temp', 2)('A_prior', array([[ 0.8,  0.2],
-       [ 0.2,  0.8]]))('num_inf_cores', 4)('estimate_noise', 1)('v_prior', [0, 50.0])('n_inf', 5)('K', 2)('max_iter', 1000)('v_temp', 2)('max_stack', 5)('A_temp', 2)('sigma_prior', 50.0)('sigma_temp', 2)('A_prior', array([[ 0.8,  0.2],
-       [ 0.2,  0.8]]))('num_inf_cores', 4)('estimate_noise', 1)('v_prior', [0, 50.0])('n_inf', 5)('K', 2)('max_iter', 1000)('v_temp', 2)('max_stack', 5)('A_temp', 2)('sigma_prior', 50.0)('sigma_temp', 2)('A_prior', array([[ 0.8,  0.2],
-       [ 0.2,  0.8]]))('num_inf_cores', 4)('estimate_noise', 1)('v_prior', [0, 50.0])('n_inf', 5)('K', 2)('max_iter', 1000)('v_temp', 2)('max_stack', 5)('A_temp', 2)('sigma_prior', 50.0)('sigma_temp', 2)('A_prior', array([[ 0.8,  0.2],
-       [ 0.2,  0.8]]))('num_inf_cores', 4)('estimate_noise', 1)('v_prior', [0, 50.0])('n_inf', 5)('K', 2)('max_iter', 1000)('v_temp', 2)('max_stack', 5)('A_temp', 2)('sigma_prior', 50.0)('sigma_temp', 2)('A_prior', array([[ 0.8,  0.2],
+       [ 0.2,  0.8]]))('num_inf_cores', 4)('v_prior', [0, 25.0])('n_inf', 100)('K', 2)('v_temp', 0.25)('A_temp', 2)('sigma_prior', 25.0)('sigma_temp', 0.25)('A_prior', array([[ 0.8,  0.2],
+       [ 0.2,  0.8]]))('estimate_noise', 1)('v_prior', [0, 50.0])('n_inf', 5)('K', 2)('max_iter', 1000)('v_temp', 2)('max_stack', 5)('A_temp', 2)('sigma_prior', 50.0)('sigma_temp', 2)('A_prior', array([[ 0.8,  0.2],
        [ 0.2,  0.8]]))('num_inf_cores', 4)

@@ -17,19 +17,21 @@ project_folder = 'stack_validation'
 test_name = 'test'
 #test_name = 'basic_eve_10sec'
 ###Routine Params
+#Conduct initialization infernce?
+init_inference = False
 #Num Independent Runs for final inference step
-final_iters = 2
+final_iters = 500
 #Num Paths to Track for final inf
-f_stack_size = 5
+f_stack_size = 250
 #num init runs
-init_iters = 5
+init_iters = 100
 #size init stack
-init_stack_size = 5
+init_stack_size = 50
 ###Biological System Params
 #num states
-num_states = 2
+num_states = 3
 #Time Resolution
-dT = 10.0
+dT = 5.1
 #Type of rate matrix
 exp_type = 'eve2'
 #Routine Param Type
@@ -70,8 +72,34 @@ class RPInitBase(object):
         self.sigma_temp = 2
 
 
+class RPInitCold(object):
+    def __init__(self, n_states,  n_cores=cores):
+        # ------------------------------------Routine Variable Definitions------------------------------------------------------#
+        self.n_inf = 100
+        #num_states
+        self.K = n_states
+        #---------------------Inference Init Variables----------------------------------------------------#
+        if n_states == 3:
+            self.v_prior = np.array([0, 25.0, 50.0])
+            self.A_prior = np.array([[.8, .1, .1],
+                                    [.1, .8, .1],
+                                    [.1, .1, .8]])
+        elif n_states == 2:
+            self.v_prior = [0, 25.0]
+            self.A_prior = np.array([[.8, .2],
+                                     [.2, .8]])
+            self.sigma_prior = self.v_prior[1]
+
+        # Degree of flexibility to allow in param initiations (2 = +/- full variable value)
+        self.A_temp = 2
+        self.v_temp = 0.25
+        self.sigma_temp = 0.25
+
+
 class RPFinalBase(object):
-    def __init__(self, n_runs=final_iters, n_cores=cores, n_stack=f_stack_size):
+    def __init__(self, n_runs=final_iters, n_cores=cores, n_stack=f_stack_size, init_inf=init_inference):
+        #initialization inf used?
+        self.inf_init = init_inf
         # Max number of iterations permitted
         self.max_iter = 1000
         # N Separate Inferences
@@ -98,7 +126,7 @@ class Eve2Exp(object):
         self.batch_size = n_traces
         # Set transition rate matrix for system
         if n_states == 3:
-            self.R = np.array([[-.006, .009, .005], [.004, -.014, .02], [.002, .005, -.025]]) * dt
+            self.R = np.array([[-.008, .009, .010], [.006, -.014, .025], [.002, .005, -.035]]) * dt
         elif n_states == 2:
             self.R = np.array([[-.004, .014], [.004, -.014]]) * dt
         # Set emission levels
@@ -147,8 +175,12 @@ if exp_type == 'eve2':
 else:
     expClass = GenericExp(n_states=num_states, dt=dT)
 if rType == 'basic':
-    RoutineParamsInit = RPInitBase(n_states=num_states)
     RoutineParamsFinal = RPFinalBase()
+
+if not init_inference:
+    RoutineParamsInit = RPInitCold(n_states=num_states)
+else:
+    RoutineParamsInit = RPInitBase(n_states=num_states)
 
 # Set test name
 write_name = exp_type + '_' + str(num_states) + 'state_' + test_name
@@ -175,7 +207,7 @@ def runit(init_set, fluo,pi,est_noise):
                                                                                max_iter=RoutineParamsFinal.max_iter,
                                                                                eps=10e-4)
 
-    return np.exp(A_list[-1]), v_list[-1], logL_list[-1], sigma_list[-1], iters, run_time
+    return np.exp(A_list[-1]), v_list[-1], sigma_list[-1], logL_list[-1], iters, run_time
 
 if __name__ == "__main__":
 
@@ -213,19 +245,22 @@ if __name__ == "__main__":
         A_init = A_init / np.tile(np.sum(A_init,axis=0),(K_init,1))
 
         sigma_init = RoutineParamsInit.sigma_prior + (np.random.rand()-.5)*RoutineParamsInit.sigma_prior*RoutineParamsInit.sigma_temp
-        init_list.append([A_init, v_init, sigma_init])
+        init_list.append([A_init, v_init, sigma_init, 1.0])
 
-    print("Running Initialization EM...")
-    init_time = time.time()
-    init_results = Parallel(n_jobs=RoutineParamsInit.num_inf_cores)(
-        delayed(runit)(init_set=p0, fluo=fluo_states, pi=expClass.pi, est_noise=RoutineParamsInit.estimate_noise) for p0 in init_list)
-    print("Runtime: " + str(time.time() - init_time))
+    if init_inference:
+        print("Running Initialization EM...")
+        init_time = time.time()
+        init_results = Parallel(n_jobs=RoutineParamsInit.num_inf_cores)(
+            delayed(runit)(init_set=p0, fluo=fluo_states, pi=expClass.pi, est_noise=RoutineParamsInit.estimate_noise) for p0 in init_list)
+        print("Runtime: " + str(time.time() - init_time))
+    else:
+        init_results = init_list
 
     # -------------------------------------------Conduct Inference-----------------------------------------------------#
     inf_list = []
     #Use results of initial search to initialize final inference runs
     init_ids = len(init_results)
-    init_weights = np.array([init_results[i][2] for i in xrange(len(init_results))])
+    init_weights = np.array([init_results[i][3] for i in xrange(len(init_results))])
     init_weights = init_weights / np.sum(init_weights)
     for i in xrange(RoutineParamsFinal.n_inf):
         init_id = np.random.choice(init_ids, p = init_weights)
@@ -241,7 +276,7 @@ if __name__ == "__main__":
         A_init[np.where(A_init < 0)[0]] = 0
         A_init = A_init / np.tile(np.sum(A_init, axis=0), (K_init, 1))
 
-        sigma_init = init_results[init_id][3] + (np.random.rand() - .5) * init_results[init_id][3] * RoutineParamsFinal.sigma_temp
+        sigma_init = init_results[init_id][2] + (np.random.rand() - .5) * init_results[init_id][2] * RoutineParamsFinal.sigma_temp
         inf_list.append([A_init, v_init, sigma_init])
 
     print("Running EM Optimization...")
@@ -286,18 +321,21 @@ if __name__ == "__main__":
                 row = list(chain(*[A_flat, inf_results[n][1].tolist(), [inf_results[n][2]], expClass.pi]))
                 writer.writerow(row)
 
-#Save Simulation Variables to File
-initVars = vars(RoutineParamsInit)
-finVars = vars(RoutineParamsFinal)
-simVars = vars(expClass)
-# {'kids': 0, 'name': 'Dog', 'color': 'Spotted', 'age': 10, 'legs': 2, 'smell': 'Alot'}
-# now dump this in some way or another
-initOut = open(os.path.join(writepath, "init_params.txt"), "a")
-for item in initVars.items():
-    initOut.write(str(item))
-finOut = open(os.path.join(writepath, "final_params.txt"), "a")
-for item in finVars.items():
-    finOut.write(str(item))
-simOut = open(os.path.join(writepath,"sim_params.txt"), "a")
-for item in simVars.items():
-    simOut.write(str(item))
+    #Save Simulation Variables to File
+    initVars = vars(RoutineParamsInit)
+    finVars = vars(RoutineParamsFinal)
+    simVars = vars(expClass)
+    # {'kids': 0, 'name': 'Dog', 'color': 'Spotted', 'age': 10, 'legs': 2, 'smell': 'Alot'}
+    # now dump this in some way or another
+    initOut = open(os.path.join(writepath, "init_params.txt"), "w")
+    for item in initVars.items():
+        initOut.write(str(item))
+    initOut.close()
+    finOut = open(os.path.join(writepath, "final_params.txt"), "w")
+    for item in finVars.items():
+        finOut.write(str(item))
+    finOut.close()
+    simOut = open(os.path.join(writepath,"sim_params.txt"), "w")
+    for item in simVars.items():
+        simOut.write(str(item))
+    simOut.close()
