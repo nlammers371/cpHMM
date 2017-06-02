@@ -2,213 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="91ca2321-f706-43c3-8045-f85804568498" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_0_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_0_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_10_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_10_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_11_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_11_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_12_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_12_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_13_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_13_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_14_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_14_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_15_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_15_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_16_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_16_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_17_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_17_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_18_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_18_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_19_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_19_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_1_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_1_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_20_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_20_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_21_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_21_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_22_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_22_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_23_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_23_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_24_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_24_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_25_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_25_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_26_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_26_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_27_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_27_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_28_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_28_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_29_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_29_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_2_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_2_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_30_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_30_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_31_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_31_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_32_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_32_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_33_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_33_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_34_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_34_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_35_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_35_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_36_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_36_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_37_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_37_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_38_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_38_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_39_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_39_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_3_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_3_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_40_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_40_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_41_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_41_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_42_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_42_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_43_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_43_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_44_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_44_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_45_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_45_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_46_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_46_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_47_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_47_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_48_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_48_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_49_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_49_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_4_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_4_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_50_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_50_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_51_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_51_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_52_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_52_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_53_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_53_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_54_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_54_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_55_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_55_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_56_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_56_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_57_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_57_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_58_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_58_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_59_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_59_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_5_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_5_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_60_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_60_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_61_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_61_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_62_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_62_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_63_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_63_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_64_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_64_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_65_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_65_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_66_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_66_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_67_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_67_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_68_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_68_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_69_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_69_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_6_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_6_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_70_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_70_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_71_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_71_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_72_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_72_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_73_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_73_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_74_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_74_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_75_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_75_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_76_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_76_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_77_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_77_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_78_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_78_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_79_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_79_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_7_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_7_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_80_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_80_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_81_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_81_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_82_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_82_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_83_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_83_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_84_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_84_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_85_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_85_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_86_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_86_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_87_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_87_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_88_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_88_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_89_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_89_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_8_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_8_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_90_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_90_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_91_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_91_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_92_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_92_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_93_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_93_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_94_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_94_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_95_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_95_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_96_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_96_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_97_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_97_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_98_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_98_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_99_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_99_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_9_fluo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/plots/tr_9_promoter.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/mike_params_3state_min_noise_cold_best_results.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/mike_params_3state_min_noise_cold_full_results.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/mike_params_3state_min_noise_cold_initializations.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_min_noise_cold/mike_params_3state_min_noise_cold_true_values.csv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_low_noise_cold_m_stack150/mike_params_3state_low_noise_cold_m_stack150_true_values.csv" afterPath="$PROJECT_DIR$/results/decode_validation/mike_params_3state_low_noise_cold_m_stack150/mike_params_3state_low_noise_cold_m_stack150_true_values.csv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/.idea/misc.xml" afterPath="$PROJECT_DIR$/src/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/.idea/src.iml" afterPath="$PROJECT_DIR$/src/.idea/src.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/utilities/cpHMM_viterbi.py" afterPath="$PROJECT_DIR$/src/utilities/cpHMM_viterbi.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/utilities/functions.py" afterPath="$PROJECT_DIR$/src/utilities/functions.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -245,14 +40,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="functions.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="functions.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/utilities/functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="311" column="21" lean-forward="false" selection-start-line="311" selection-start-column="21" selection-end-line="311" selection-end-column="21" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="34">
+              <caret line="2" column="33" lean-forward="false" selection-start-line="2" selection-start-column="33" selection-end-line="2" selection-end-column="33" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -260,11 +53,9 @@
       <file leaf-file-name="cpHMM_viterbi.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/utilities/cpHMM_viterbi.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1801">
-              <caret line="115" column="0" lean-forward="false" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="34">
+              <caret line="2" column="34" lean-forward="false" selection-start-line="2" selection-start-column="34" selection-end-line="2" selection-end-column="34" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -272,21 +63,19 @@
       <file leaf-file-name="cp_test_ht.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cp_test_ht.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="66">
-              <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+            <state relative-caret-position="154">
+              <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="stack_decoder.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="stack_decoder.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/utilities/stack_decoder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-38">
-              <caret line="8" column="32" lean-forward="false" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="51">
+              <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -342,10 +131,10 @@
         <option value="$PROJECT_DIR$/src/utilities/__init__.py" />
         <option value="$PROJECT_DIR$/src/HMMBasic.py" />
         <option value="$PROJECT_DIR$/src/utilities/stack_decoder.py" />
-        <option value="$PROJECT_DIR$/src/utilities/functions.py" />
         <option value="$PROJECT_DIR$/src/main.py" />
-        <option value="$PROJECT_DIR$/src/utilities/cpHMM_viterbi.py" />
         <option value="$PROJECT_DIR$/src/cp_test_ht.py" />
+        <option value="$PROJECT_DIR$/src/utilities/functions.py" />
+        <option value="$PROJECT_DIR$/src/utilities/cpHMM_viterbi.py" />
       </list>
     </option>
   </component>
@@ -628,9 +417,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5287">
           <caret line="311" column="21" lean-forward="false" selection-start-line="311" selection-start-column="21" selection-end-line="311" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -638,9 +425,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1955">
           <caret line="115" column="0" lean-forward="false" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -656,9 +441,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="8" column="32" lean-forward="false" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -694,9 +477,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5287">
           <caret line="311" column="21" lean-forward="true" selection-start-line="311" selection-start-column="21" selection-end-line="311" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -704,9 +485,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -714,9 +493,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="8" column="32" lean-forward="true" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -766,9 +543,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1411">
           <caret line="86" column="15" lean-forward="false" selection-start-line="86" selection-start-column="15" selection-end-line="86" selection-end-column="85" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -821,41 +596,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cp_test_ht.py">
+    <entry file="file://$PROJECT_DIR$/src/utilities/functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+        <state relative-caret-position="34">
+          <caret line="2" column="33" lean-forward="false" selection-start-line="2" selection-start-column="33" selection-end-line="2" selection-end-column="33" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/utilities/cpHMM_viterbi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1801">
-          <caret line="115" column="0" lean-forward="false" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="34">
+          <caret line="2" column="34" lean-forward="false" selection-start-line="2" selection-start-column="34" selection-end-line="2" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cp_test_ht.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/utilities/stack_decoder.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-38">
-          <caret line="8" column="32" lean-forward="false" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/utilities/functions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="311" column="21" lean-forward="false" selection-start-line="311" selection-start-column="21" selection-end-line="311" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="51">
+          <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
