@@ -11,6 +11,76 @@ from utilities.stack_decoder import decode_cp
 import os
 import csv
 
+<<<<<<< HEAD
+#------------------------------------Routine Variable Definitions------------------------------------------------------#
+#Max number of iterations permitted
+max_iter = 1000
+# Seconds per time step
+dt = 5.1
+#N Separate Inferences
+n_inf = 500
+# set num cores to use
+num_inf_cores = 16 #multiprocessing.cpu_count()
+# Set number of initialization routines
+#n_init = 1
+# set num cores to use
+#num_init_cores = multiprocessing.cpu_count()
+#Max num permitted paths in stack
+max_stack = 750
+#Estimate noise
+estimate_noise = 0
+#-------------------------------------"True" Variable Definitions------------------------------------------------------#
+# noise
+sigma = 25
+# memory
+w = 30
+# Fix trace length for now
+T = 200
+#Num states
+K = 3
+# Number of traces per batch
+batch_size = 100
+# Set transition rate matrix for system
+if K == 3:
+    R = np.array([[-.006, .009, .005],
+                  [.004, -.014, .02],
+                  [.002, .005, -.025]]) * dt
+
+
+elif K == 2:
+    R = np.array([[-.004, .014], [.004, -.014]]) * dt
+
+#A = scipy.linalg.expm(R, q=None)
+#print(A)
+# Set emission levels
+if K == 3:
+    v = np.array([0.0, 25.0, 50.0])
+elif K == 2:
+    v = np.array([0.0, 25.0])
+
+# Initial stat pdf
+if K == 3:
+    pi = [.8,.1,.1]
+elif K == 2:
+    pi = [.8, .2]
+
+#------------------------------------------Inference Init Variables----------------------------------------------------#
+if K == 3:
+    v_prior = np.array([   0,   20.0,  55.0])
+    A_prior = np.array([[ .9,   .07,   .1],
+                        [ .05,   .85,   .1],
+                        [ .05,   .08,   .8]])
+elif K == 2:
+    v_prior = [0,35]
+    A_prior = np.array([[.8, .2],
+                        [.2, .8]])
+sigma_prior = 35
+
+#Degree of flexibility to allow in param initiations (2 = +/- full variable value)
+A_temp = 2
+v_temp = 1
+sigma_temp = 1
+=======
 #------------------------------------------------Top Level Exp Specifications------------------------------------------#
 ###Project Params
 project_folder = 'stack_validation'
@@ -168,6 +238,7 @@ class GenericExp(object):
         elif n_states == 2:
             self.pi = [.8, .2]
 
+>>>>>>> 66bf5e9fd20906a647d8c22f5f04e515d90d187e
 
 #-----------------------------------------------Write Paths------------------------------------------------------------#
 if exp_type == 'eve2':
@@ -183,9 +254,23 @@ else:
     RoutineParamsInit = RPInitBase(n_states=num_states)
 
 # Set test name
+<<<<<<< HEAD
+test_name = "mp_3state_fullstop_w30_t5_stack750"
+# Set writepath for results
+outpath = '../results/decode_validation/'
+# Set project name (creates subfolder)
+subfolder_name = test_name
+writepath = os.path.join(outpath, subfolder_name)
+if not os.path.isdir(writepath):
+    os.makedirs(writepath)
+
+if not os.path.isdir(os.path.join(outpath, subfolder_name, 'plots')):
+    os.makedirs(os.path.join(outpath, subfolder_name, 'plots'))
+=======
 write_name = exp_type + '_' + str(num_states) + 'state_' + test_name
 # Set writepath for results
 outpath = '../results/' + project_folder + '/'
+>>>>>>> 66bf5e9fd20906a647d8c22f5f04e515d90d187e
 
 writepath = os.path.join(outpath, write_name)
 
