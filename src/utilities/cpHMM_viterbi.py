@@ -24,6 +24,7 @@ def cpEM_viterbi(fluo, A_init, v_init, noise, pi0, w=1, use_viterbi=1, max_stack
     :param eps: Termination criteria--minimum permissible percent change in estimated params
     :return: Infers A and v for set of sequences
     """
+    init_time = time.time()
     min_val = 10e-10
     pi0_log = np.log(pi0)
     K = len(v_init)
@@ -127,6 +128,7 @@ def cpEM_viterbi_full(fluo, A_init, v_init, noise_init, pi0, n_groups=1, estimat
     :param eps: Termination criteria--minimum permissible percent change in estimated params
     :return: Infers A and v for set of sequences
     """
+    init_time = time.time()
     min_val = 10e-10
     pi0_log = np.log(pi0)
     K = len(v_init)
@@ -240,5 +242,5 @@ def cpEM_viterbi_full(fluo, A_init, v_init, noise_init, pi0, n_groups=1, estimat
             print(A_new)
             print(delta)
         iter += 1
-
-    return (A_list, v_list, logL_list, noise_list)
+    r_time = time.time() - init_time
+    return (A_list, v_list, logL_list, noise_list, iter, r_time)
