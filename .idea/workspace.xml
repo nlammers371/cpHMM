@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="91ca2321-f706-43c3-8045-f85804568498" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/results/stack_validation/eve2_2state_test_1496381716.26/test_true_values.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/results/stack_validation/eve2_2state_test_1496381839.82/best_results.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/results/stack_validation/eve2_2state_test_1496381839.82/test_true_values.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/results/stack_validation/eve2_2state_test_1496382002.96/best_results.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/results/stack_validation/eve2_2state_test_1496382002.96/final_params.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/results/stack_validation/eve2_2state_test_1496382002.96/full_results.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/results/stack_validation/eve2_2state_test_1496382002.96/init_params.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/results/stack_validation/eve2_2state_test_1496382002.96/initializations.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/results/stack_validation/eve2_2state_test_1496382002.96/sim_params.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/results/stack_validation/eve2_2state_test_1496382002.96/test_true_values.csv" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/results/stack_validation/eve2_2state_test/final_params.txt" afterPath="$PROJECT_DIR$/results/stack_validation/eve2_2state_test/final_params.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/results/stack_validation/eve2_2state_test/init_params.txt" afterPath="$PROJECT_DIR$/results/stack_validation/eve2_2state_test/init_params.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/results/stack_validation/eve2_2state_test/sim_params.txt" afterPath="$PROJECT_DIR$/results/stack_validation/eve2_2state_test/sim_params.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/cp_test_ht.py" afterPath="$PROJECT_DIR$/src/cp_test_ht.py" />
-    </list>
+    <list default="true" id="91ca2321-f706-43c3-8045-f85804568498" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -76,11 +60,9 @@
       <file leaf-file-name="cp_test_ht.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/cp_test_ht.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="458">
-              <caret line="45" column="8" lean-forward="false" selection-start-line="45" selection-start-column="8" selection-end-line="45" selection-end-column="8" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="44">
+              <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -451,9 +433,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -648,11 +628,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cp_test_ht.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="458">
-          <caret line="45" column="8" lean-forward="false" selection-start-line="45" selection-start-column="8" selection-end-line="45" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="44">
+          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
