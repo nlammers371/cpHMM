@@ -2,7 +2,7 @@ import time
 import sys
 #import scipy # various algorithm
 import numpy as np
-#from scipy.misc import logsumexp
+from scipy.misc import logsumexp
 import math
 from itertools import chain
 import itertools

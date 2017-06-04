@@ -59,8 +59,8 @@ def alpha_alg_cp(fluo_vec, A_log, v, w, noise, pi0_log, max_stack):
                     dp_start = time.time()
                     sn = [l] + Stack[k][:-1]
                     if k > 0 and sn == new_stack[-1]:
-                        new_probs[-1] = logsumexp([log_L_fluo(fluo_vec[t], new_fluo[-1], noise) + A_log[
-                            l, state] + alpha_array[k, t - 1], new_probs[-1]])
+                        new_probs[-1] = logsumexp([log_L_fluo(fluo_vec[t], new_fluo[-1], noise) + A_log[l, state]
+                                                   + alpha_array[k, t - 1], new_probs[-1]])
                         new_pointers[-1] = [pointer for pointer in new_pointers[-1]] + [k]
                         dp_total += time.time() - dp_start
 
