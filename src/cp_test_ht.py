@@ -14,22 +14,22 @@ import csv
 #------------------------------------------------Top Level Exp Specifications------------------------------------------#
 ###Project Params
 project_folder = 'stack_validation'
-test_name = 'test'
+test_name = 'cold_test_2state750_full_gene'
 #test_name = 'basic_eve_10sec'
 ###Routine Params
-#Conduct initialization infernce?
+#Conduct initialization inference?
 init_inference = False
 #Num Independent Runs for final inference step
-final_iters = 500
+final_iters = 250
 #Num Paths to Track for final inf
-f_stack_size = 250
+f_stack_size = 750
 #num init runs
 init_iters = 100
 #size init stack
 init_stack_size = 50
-###Biological System Params
+###Experimental Sim Params
 #num states
-num_states = 3
+num_states = 2
 #Time Resolution
 dT = 5.1
 #Type of rate matrix
@@ -37,7 +37,7 @@ exp_type = 'eve2'
 #Routine Param Type
 rType = 'basic'
 #Set Core Num
-cores = multiprocessing.cpu_count()
+cores = 16 #multiprocessing.cpu_count()
 #Class of Routine param values to use for initial search to narrow range of possible values
 class RPInitBase(object):
     def __init__(self, n_states, n_runs=init_iters, n_cores=cores, n_stack=init_stack_size):
@@ -56,7 +56,7 @@ class RPInitBase(object):
         self.estimate_noise = 1
         # ------------------------------------------Inference Init Variables----------------------------------------------------#
         if n_states == 3:
-            self.v_prior = np.array([0, 50.0, 50.0])
+            self.v_prior = np.array([0, 25.0, 50.0])
             self.A_prior = np.array([[.8, .1, .1],
                                 [.1, .8, .1],
                                 [.1, .1, .8]])
@@ -67,9 +67,9 @@ class RPInitBase(object):
             self.sigma_prior = self.v_prior[1]
 
         # Degree of flexibility to allow in param initiations (2 = +/- full variable value)
-        self.A_temp = 2
-        self.v_temp = 2
-        self.sigma_temp = 2
+        self.A_temp = 1.5
+        self.v_temp = .25
+        self.sigma_temp = .25
 
 
 class RPInitCold(object):
@@ -81,14 +81,14 @@ class RPInitCold(object):
         #---------------------Inference Init Variables----------------------------------------------------#
         if n_states == 3:
             self.v_prior = np.array([0, 25.0, 50.0])
-            self.A_prior = np.array([[.8, .1, .1],
-                                    [.1, .8, .1],
-                                    [.1, .1, .8]])
+            self.A_prior = np.array([[.9, .07, .1],
+                                    [.05, .85, .1],
+                                    [.05, .08, .8]])
         elif n_states == 2:
             self.v_prior = [0, 25.0]
             self.A_prior = np.array([[.8, .2],
                                      [.2, .8]])
-            self.sigma_prior = self.v_prior[1]
+        self.sigma_prior = self.v_prior[1]
 
         # Degree of flexibility to allow in param initiations (2 = +/- full variable value)
         self.A_temp = 2
@@ -111,15 +111,17 @@ class RPFinalBase(object):
         # Estimate noise
         self.estimate_noise = 0
         # Degree of flexibility to allow in param initiations (2 = +/- full variable value)
-        self.A_temp = .25
+        self.A_temp = 1
         self.v_temp = .25
         self.sigma_temp = .25
 
 #-------------------------------------"True" Variable Definitions------------------------------------------------------#
 class Eve2Exp(object):
     def __init__(self, n_states, dt, n_traces=100, tr_len=200):
+        #elongation time
+        self.t_elong = 160
         # memory
-        self.w = int(160 / dt)
+        self.w = int(self.t_elong / dt)
         # Fix trace length for now
         self.T = tr_len
         # Number of traces per batch
@@ -127,6 +129,7 @@ class Eve2Exp(object):
         # Set transition rate matrix for system
         if n_states == 3:
             self.R = np.array([[-.008, .009, .010], [.006, -.014, .025], [.002, .005, -.035]]) * dt
+
         elif n_states == 2:
             self.R = np.array([[-.004, .014], [.004, -.014]]) * dt
         # Set emission levels
@@ -135,7 +138,7 @@ class Eve2Exp(object):
         elif n_states == 2:
             self.v = np.array([0.0, 25.0])
         # noise
-        self.sigma = .05 * self.v[1] * self.w
+        self.sigma = .04 * self.v[1] * self.w
         # Initial stat pdf
         if n_states == 3:
             self.pi = [.8,.1,.1]
@@ -316,7 +319,7 @@ if __name__ == "__main__":
 
             with open(os.path.join(writepath, 'initializations.csv'), write) as init_out:
                 writer = csv.writer(init_out)
-                results = init_list[n]
+                results = inf_list[n]
                 A_flat = np.reshape(results[0], RoutineParamsInit.K ** 2).tolist()
                 row = list(chain(*[A_flat, inf_results[n][1].tolist(), [inf_results[n][2]], expClass.pi]))
                 writer.writerow(row)
