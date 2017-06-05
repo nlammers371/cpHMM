@@ -1,0 +1,1 @@
+('estimate_noise', 1)('n_inf', 500)('max_iter', 1000)('v_temp', 0.25)('max_stack', 750)('A_temp', 0.25)('inf_init', False)('sigma_temp', 0.25)('num_inf_cores', 20)('model', 'viterbi')
