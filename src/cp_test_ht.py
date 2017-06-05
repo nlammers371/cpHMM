@@ -14,21 +14,21 @@ import os
 import csv
 #------------------------------------------------Top Level Exp Specifications------------------------------------------#
 ###Project Params
-project_folder = 'truncated_BW_testing'
+project_folder = 'stack_decoder_testing'
 project_subfolder = 'B_realistic_scenario'
 test_name = 'full_gene'
 #test_name = 'basic_eve_10sec'
 ###Routine Params
 #Specify whether you wish to use truncated BW or Stack Decoder Viterbi
-model = 'bw'
+model = 'viterbi'
 #Conduct initialization inference?
 init_inference = False
 #Num Independent Runs for final inference step
-final_iters = 100
+final_iters = 250
 #Num Paths to Track for final inf
-f_stack_size = 30
+f_stack_size = 750
 #Estimate Noise in Final Sim?
-est_sigma_final = 0
+est_sigma_final = 1
 ###########Initialization##################
 #If using initialization inference, specify kind of inference
 model_init = 'viterbi'
@@ -93,15 +93,15 @@ class RPInitCold(object):
                                     [.05, .85, .1],
                                     [.05, .08, .8]])
         elif n_states == 2:
-            self.v_prior = [0, 40.0]
-            self.A_prior = np.array([[.95, .15],
-                                     [.05, .85]])
-        self.sigma_prior = 0.25 #0.625*self.v_prior[1]
+            self.v_prior = [0, 35.0]
+            self.A_prior = np.array([[.90, .90],
+                                     [.1, .1]])
+        self.sigma_prior = 25.0 #0.625*self.v_prior[1]
 
         # Degree of flexibility to allow in param initiations (2 = +/- full variable value)
-        self.A_temp = 1
-        self.v_temp = 1
-        self.sigma_temp = .25
+        self.A_temp = 1.5
+        self.v_temp = 1.5
+        self.sigma_temp = 1.5
 
 
 class RPFinalBase(object):
@@ -127,6 +127,7 @@ class RPFinalBase(object):
 #-------------------------------------"True" Variable Definitions------------------------------------------------------#
 class Eve2Exp(object):
     def __init__(self, n_states, dt, n_traces=50, tr_len=200):
+        self.dt = dT
         #elongation time
         self.t_elong = 160
         # memory
@@ -147,7 +148,7 @@ class Eve2Exp(object):
         elif n_states == 2:
             self.v = np.array([0.0, 25.0])
         # noise
-        self.sigma =  25 #.1 * self.v[1] * self.w
+        self.sigma = 25 #.1 * self.v[1] * self.w
         # Initial stat pdf
         if n_states == 3:
             self.pi = [.8,.1,.1]
@@ -156,6 +157,7 @@ class Eve2Exp(object):
 
 class GenericExp(object):
     def __init__(self, n_states, dt, n_traces=100, tr_len=200):
+        self.dt = dT
         # memory
         self.w = int(160 / dt)
         # Fix trace length for now
