@@ -97,7 +97,7 @@ def alpha_alg_cp(fluo_vec, A_log, v, w, noise, pi0_log, max_stack):
             Stack = [new_stack[a] for a in sorted_new_args]
             sort_total += time.time() - sort_time
 
-        f = [[0,0,0]]*max_stack
+        f = [[0]*K]*max_stack
         for i, stk in enumerate(Stack):
             ct = [len(np.where(np.array(stk,dtype='int')==k)[0]) for k in xrange(K)]
             f[i] = ct
@@ -387,10 +387,12 @@ def cpEM_BW(fluo, A_init, v_init, noise_init, pi0, w, max_stack=100, max_iter=10
         b_full = np.repeat(list(chain(*fluo)),stack_depth)
         F_square = np.zeros((K,K))
         b_vec = np.zeros(K)
+        print(F_square)
+        print(F_full[0:10])
+        sys.exit(1)
         for k in xrange(K):
             F_square[k,:] = np.sum(F_full * F_full[:, k][:, np.newaxis] * wt_full[:, np.newaxis], axis=0)
             b_vec[k] =  np.sum(F_full[:,k] * wt_full * b_full)
-
         try:
             v_new = np.linalg.solve(F_square,b_vec)
         except:
@@ -428,19 +430,22 @@ if __name__ == '__main__':
     T = 100
     # Number of traces per batch
     batch_size = 2
-    R = np.array([[-.008, .009, .01], [.006, -.014, .025], [.002, .005, -.035]]) * 10.2
+    #R = np.array([[-.008, .009, .01], [.006, -.014, .025], [.002, .005, -.035]]) * 10.2
+    R = np.array([[-.004, .014], [.004, -.014]]) * 10.2
     A = scipy.linalg.expm(R, q=None)
     print(A)
-    v = np.array([0.0, 50.0, 100.0])
-    pi = [.2, .3, .5]
+    #v = np.array([0.0, 50.0, 100.0])
+    v = np.array([0.0, 50.0])
+    #pi = [.2, .3, .5]
+    pi = [.7, .3]
     K = len(v)
-    max_stack = 30
+    max_stack = 5
     sigma = 25
     promoter_states, fluo_states, promoter_states_discrete, fluo_states_nn = \
         generate_traces_gill(w, T, batch_size, r_mat=R, v=v, noise_level=sigma, alpha=0.0, pi0=pi)
 
     t_init = time.time()
-    A_list, v_list, logL_list, iter, time = cpEM_BW(fluo_states, A_init=A, v_init=v, noise_init=sigma*8, pi0=pi, w=w, max_stack=max_stack, max_iter=1000, eps=10e-4)
+    A_list, v_list, logL_list, iter, time = cpEM_BW(fluo_states, A_init=A, v_init=v, noise_init=sigma*1, pi0=pi, w=w, max_stack=max_stack, max_iter=1000, eps=10e-4)
 
     """
     alpha_array, s_list, p_list, cf_list, Stack, F= alpha_alg_cp(fluo_vec=fluo_states[0], A_log=np.log(A), v=v, w=w,

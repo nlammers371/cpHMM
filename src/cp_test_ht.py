@@ -1,6 +1,7 @@
 import time
 import sys
-#import scipy # various algorithms
+import scipy as sp # various algorithms
+from scipy import linalg
 import numpy as np
 from joblib import Parallel, delayed
 import multiprocessing
@@ -13,21 +14,24 @@ import os
 import csv
 #------------------------------------------------Top Level Exp Specifications------------------------------------------#
 ###Project Params
-project_folder = 'stack_validation'
-project_subfolder = 'tests'
-test_name = 'bw_test'
+project_folder = 'stack_decoder_testing'
+project_subfolder = 'B_realistic_scenario'
+test_name = 'full_gene'
 #test_name = 'basic_eve_10sec'
 ###Routine Params
 #Specify whether you wish to use truncated BW or Stack Decoder Viterbi
 model = 'viterbi'
-#If using initialization inference, specify kind of inference
-model_init = 'viterbi'
 #Conduct initialization inference?
 init_inference = False
 #Num Independent Runs for final inference step
-final_iters = 2
+final_iters = 250
 #Num Paths to Track for final inf
-f_stack_size = 10
+f_stack_size = 750
+#Estimate Noise in Final Sim?
+est_sigma_final = 1
+###########Initialization##################
+#If using initialization inference, specify kind of inference
+model_init = 'viterbi'
 #num init runs
 init_iters = 100
 #size init stack
@@ -36,13 +40,13 @@ init_stack_size = 50
 #num states
 num_states = 2
 #Time Resolution
-dT = 5.1
+dT = 10.2
 #Type of rate matrix
 exp_type = 'eve2'
 #Routine Param Type
 rType = 'basic'
 #Set Core Num
-cores = multiprocessing.cpu_count()
+cores = 20 #multiprocessing.cpu_count()
 class RPInitBase(object):
     def __init__(self, n_states, n_runs=init_iters, n_cores=cores, n_stack=init_stack_size):
         # ------------------------------------Routine Variable Definitions------------------------------------------------------#
@@ -65,7 +69,7 @@ class RPInitBase(object):
                                         [.1, .8, .1],
                                         [.1, .1, .8]])
         elif n_states == 2:
-            self.v_prior = [0, 50.0]
+            self.v_prior = [0, 25.0]
             self.A_prior = np.array([[.8, .2],
                                      [.2, .8]])
             self.sigma_prior = self.v_prior[1]
@@ -89,7 +93,7 @@ class RPInitCold(object):
                                     [.05, .85, .1],
                                     [.05, .08, .8]])
         elif n_states == 2:
-            self.v_prior = [0, 25.0]
+            self.v_prior = [0, 40.0]
             self.A_prior = np.array([[.8, .2],
                                      [.2, .8]])
         self.sigma_prior = self.v_prior[1]
@@ -113,15 +117,15 @@ class RPFinalBase(object):
         # Max num permitted paths in stack
         self.max_stack = n_stack
         # Estimate noise
-        self.estimate_noise = 0
+        self.estimate_noise = est_sigma_final
         # Degree of flexibility to allow in param initiations (2 = +/- full variable value)
         self.A_temp = 1
-        self.v_temp = .25
-        self.sigma_temp = .25
+        self.v_temp = 1
+        self.sigma_temp = 1
 
 #-------------------------------------"True" Variable Definitions------------------------------------------------------#
 class Eve2Exp(object):
-    def __init__(self, n_states, dt, n_traces=100, tr_len=200):
+    def __init__(self, n_states, dt, n_traces=50, tr_len=200):
         #elongation time
         self.t_elong = 160
         # memory
@@ -142,7 +146,7 @@ class Eve2Exp(object):
         elif n_states == 2:
             self.v = np.array([0.0, 25.0])
         # noise
-        self.sigma = .04 * self.v[1] * self.w
+        self.sigma = .1 * self.v[1] * self.w
         # Initial stat pdf
         if n_states == 3:
             self.pi = [.8,.1,.1]
@@ -245,7 +249,7 @@ if __name__ == "__main__":
     # Set number of inference routines
     print("Writing to: " + writepath + '...')
     # Write true param values
-    with open(os.path.join(writepath, test_name + '_true_values.csv'), 'wb') as inf_out:
+    with open(os.path.join(writepath, 'true_values.csv'), 'wb') as inf_out:
         writer = csv.writer(inf_out)
         R_flat = np.reshape(expClass.R, RoutineParamsInit.K ** 2).tolist()
         row = list(chain(*[R_flat, expClass.v.tolist(), [expClass.sigma], expClass.pi]))
@@ -332,20 +336,15 @@ if __name__ == "__main__":
     # Write best param estimates to csv
     with open(os.path.join(writepath, 'best_results.csv'), 'wb') as inf_out:
         writer = csv.writer(inf_out)
-        A_flat = np.reshape(best_results[0], RoutineParamsInit.K ** 2).tolist()
+        tr_flat = np.reshape(sp.linalg.logm(best_results[0]) / dT, RoutineParamsInit.K ** 2).tolist()
         v_best = best_results[1]
-        row = list(chain(*[A_flat, v_best.tolist(), [best_results[2]], [best_results[3]], expClass.pi]))
+        row = list(chain(*[tr_flat, v_best.tolist(), [best_results[2]], [best_results[3]], expClass.pi]))
         writer.writerow(row)
 
         # write full inference results to csv
-        for n in xrange(RoutineParamsFinal.n_inf):
-            if n == 0:
-                write = 'wb'
-            else:
-                write = 'a'
-
-            with open(os.path.join(writepath, 'full_results.csv'), write) as full_out:
-                writer = csv.writer(full_out)
+        with open(os.path.join(writepath, 'full_results.csv'), 'wb') as full_out:
+            writer = csv.writer(full_out)
+            for n in xrange(RoutineParamsFinal.n_inf):
                 results = inf_results[n]
                 A_flat = np.reshape(results[0], RoutineParamsInit.K ** 2).tolist()
                 row = list(chain(
@@ -353,10 +352,11 @@ if __name__ == "__main__":
                       [inf_results[n][4]], [inf_results[n][5]]]))
                 writer.writerow(row)
 
-            with open(os.path.join(writepath, 'initializations.csv'), write) as init_out:
-                writer = csv.writer(init_out)
+        with open(os.path.join(writepath, 'initializations.csv'), 'wb') as init_out:
+            writer = csv.writer(init_out)
+            for n in xrange(RoutineParamsFinal.n_inf):
                 results = inf_list[n]
-                A_flat = np.reshape(results[0], RoutineParamsInit.K ** 2).tolist()
+                A_flat = np.reshape(sp.linalg.logm(results[0]) / dT, RoutineParamsInit.K ** 2).tolist()
                 row = list(chain(*[A_flat, inf_results[n][1].tolist(), [inf_results[n][2]], expClass.pi]))
                 writer.writerow(row)
 
