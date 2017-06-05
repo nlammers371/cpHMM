@@ -36,7 +36,7 @@ w = 30
 # Fix trace length for now
 T = 200
 #Num states
-K = 3
+K = 2
 # Number of traces per batch
 batch_size = 100
 # Set transition rate matrix for system

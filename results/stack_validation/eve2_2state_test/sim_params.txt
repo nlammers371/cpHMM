@@ -1,5 +1,0 @@
-('batch_size', 100)This thing on?('R', array([[-0.04,  0.14],
-       [ 0.04, -0.14]]))This thing on?('T', 200)This thing on?('w', 16)This thing on?('v', array([  0.,  25.]))This thing on?('pi', [0.8, 0.2])This thing on?('sigma', 20.0)This thing on?('batch_size', 100)This thing on?('R', array([[-0.04,  0.14],
-       [ 0.04, -0.14]]))This thing on?('T', 200)This thing on?('w', 16)This thing on?('v', array([  0.,  25.]))This thing on?('pi', [0.8, 0.2])This thing on?('sigma', 20.0)This thing on?('batch_size', 100)('R', array([[-0.04,  0.14],
-       [ 0.04, -0.14]]))('T', 200)('w', 16)('v', array([  0.,  25.]))('pi', [0.8, 0.2])('sigma', 20.0)('batch_size', 100)This thing on?('R', array([[-0.04,  0.14],
-       [ 0.04, -0.14]]))This thing on?('T', 200)This thing on?('w', 16)This thing on?('v', array([  0.,  25.]))This thing on?('pi', [0.8, 0.2])This thing on?('sigma', 20.0)This thing on?
