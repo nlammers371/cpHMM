@@ -417,9 +417,9 @@ if __name__ == '__main__':
     # memory
     w = 15
     # Fix 5race length for now
-    T = 1000
+    T = 100
     # Number of traces per batch
-    batch_size = 5
+    batch_size = 2
     R = np.array([[-.008, .009, .01], [.006, -.014, .025], [.002, .005, -.035]]) * 10.2
     A = scipy.linalg.expm(R, q=None)
     print(A)

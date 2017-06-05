@@ -276,7 +276,7 @@ def viterbi_compound(fluo, A_log, v, noise, pi0_log, w, cp_array, to_from, cp_in
     return (cp_state_fits, cp_fluo_fits, state_fits, fluo_fits, logL_list)
 
 #Approximate compound BW for inferring HMM parameteris in high-memory systems
-def cpEM_BW(fluo, A_init, v_init, noise, pi0, w, max_stack=100, max_iter=1000, eps=10e-4):
+def cpEM_BW(fluo, A_init, v_init, noise_init, pi0, w, max_stack=100, max_iter=1000, eps=10e-4, verbose=0):
     """
     :param fluo: time series of fluorescent intensities (list of lists)
     :param A_init: Initial guess at the system's transition probability matrix (KxK)
@@ -301,7 +301,6 @@ def cpEM_BW(fluo, A_init, v_init, noise, pi0, w, max_stack=100, max_iter=1000, e
     total_time = 0
     while iter  < max_iter and abs(delta) > eps:
         loop_start_time = time.time()
-        setup_start = time.time()
         v_curr = v_list[iter-1]
         A_log= A_list[iter-1]
         #--------------------------Fwd Bkwd Algorithm for Each Sequence----------------------------------------------------#
@@ -318,17 +317,17 @@ def cpEM_BW(fluo, A_init, v_init, noise, pi0, w, max_stack=100, max_iter=1000, e
         for f, fluo_vec in enumerate(fluo):
             alpha_array, s_list, p_list, cf_list, Stack, F_list = alpha_alg_cp(fluo_vec=fluo_vec,
                                                                        A_log=A_log,
-                                                                       v=v,
+                                                                       v=v_curr,
                                                                        w=w,
-                                                                       noise=noise,
+                                                                       noise=noise_init,
                                                                        pi0_log=pi0_log,
                                                                        max_stack=stack_depth)
 
             beta_array = beta_alg_cp(fluo_vec=fluo_vec,
                                      A_log=A_log,
-                                     v=v,
+                                     v=v_curr,
                                      w=w,
-                                     noise=noise,
+                                     noise=noise_init,
                                      pi0_log=pi0_log,
                                      pointers=p_list,
                                      alpha_states=s_list,
@@ -366,7 +365,7 @@ def cpEM_BW(fluo, A_init, v_init, noise, pi0, w, max_stack=100, max_iter=1000, e
                         from_state = s[t][r]
                         to_state = s[t+1][row]
                         event = a[r,t] + b[row,t+1] + A_log[to_state,from_state] + log_L_fluo(fluo=fluo_vec[t+1],
-                                                fluo_est=i[t+1][row], noise=noise)
+                                                fluo_est=i[t+1][row], noise=noise_init)
                         event_list.append(event-sp)
                         event_id.append(K*to_state+from_state)
         event_list = np.array(event_list)
@@ -381,6 +380,7 @@ def cpEM_BW(fluo, A_init, v_init, noise, pi0, w, max_stack=100, max_iter=1000, e
         for f, fluo_vec in enumerate(fluo):
             #Transpose alpha beta arrays to keep format compatible with F counts
             wt_full += np.reshape(np.transpose(alpha_arrays[f] + beta_arrays[f] - seq_log_probs[f]).tolist(),(len(fluo_vec)*stack_depth)).tolist()
+
         #Convert to arrays
         F_full = np.array(list(chain(*chain(*cp_state_list))))
         wt_full = np.exp(np.array(wt_full))
@@ -391,7 +391,13 @@ def cpEM_BW(fluo, A_init, v_init, noise, pi0, w, max_stack=100, max_iter=1000, e
             F_square[k,:] = np.sum(F_full * F_full[:, k][:, np.newaxis] * wt_full[:, np.newaxis], axis=0)
             b_vec[k] =  np.sum(F_full[:,k] * wt_full * b_full)
 
-        v_new = np.linalg.solve(F_square, b_vec)
+        try:
+            v_new = np.linalg.solve(F_square,b_vec)
+        except:
+            if verbose:
+                print("Warning: Singular Matrix encountered. Using LSQ fitting instead")
+            v_new, residuals, rank, singular_vals = np.linalg.lstsq(F_square,b_vec)
+
         v_list.append(v_new)
         A_list.append(A_log_new)
         logL = np.sum(seq_log_probs)
@@ -399,27 +405,29 @@ def cpEM_BW(fluo, A_init, v_init, noise, pi0, w, max_stack=100, max_iter=1000, e
         #Check % improvement in logL
         delta = (logL_list[iter-1]-logL) / logL_list[iter-1]
         if delta < 0:
-            print("Warning: Non-monotonic behavior in likelihood")
+            if verbose:
+                print("Warning: Non-monotonic behavior in likelihood")
             #sys.exit(1)
-        if iter % 1 == 0:
-            print(logL)
-            print(abs(delta))
-            print(v_new)
-            print(A_new)
-            loop_time = time.time() - loop_start_time
-            print(loop_time)
-            total_time += loop_time
+        if iter % 5 == 0:
+            if verbose:
+                print(logL)
+                print(abs(delta))
+                print(v_new)
+                print(A_new)
+                loop_time = time.time() - loop_start_time
+                print(loop_time)
+                total_time += loop_time
         iter += 1
-    print(total_time)
-    return(A_list, v_list, logL_list)
+
+    return(A_list, v_list, logL_list, iter, total_time)
 
 if __name__ == '__main__':
     # memory
     w = 15
     # Fix 5race length for now
-    T = 1000
+    T = 100
     # Number of traces per batch
-    batch_size = 5
+    batch_size = 2
     R = np.array([[-.008, .009, .01], [.006, -.014, .025], [.002, .005, -.035]]) * 10.2
     A = scipy.linalg.expm(R, q=None)
     print(A)
@@ -432,7 +440,7 @@ if __name__ == '__main__':
         generate_traces_gill(w, T, batch_size, r_mat=R, v=v, noise_level=sigma, alpha=0.0, pi0=pi)
 
     t_init = time.time()
-    A_list, v_list, logL_list = cpEM_BW(fluo_states, A_init=A, v_init=v, noise=sigma*8, pi0=pi, w=w, max_stack=max_stack, max_iter=1000, eps=10e-4)
+    A_list, v_list, logL_list, iter, time = cpEM_BW(fluo_states, A_init=A, v_init=v, noise_init=sigma*8, pi0=pi, w=w, max_stack=max_stack, max_iter=1000, eps=10e-4)
 
     """
     alpha_array, s_list, p_list, cf_list, Stack, F= alpha_alg_cp(fluo_vec=fluo_states[0], A_log=np.log(A), v=v, w=w,
