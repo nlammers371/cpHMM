@@ -14,7 +14,7 @@ import os
 import csv
 #------------------------------------------------Top Level Exp Specifications------------------------------------------#
 ###Project Params
-project_folder = 'truncated_BW_testing'
+project_folder = 'stack_decoder_testing'
 project_subfolder = 'B_realistic_scenario'
 test_name = 'full_gene'
 #test_name = 'basic_eve_10sec'
