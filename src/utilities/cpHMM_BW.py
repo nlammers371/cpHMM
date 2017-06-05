@@ -387,9 +387,6 @@ def cpEM_BW(fluo, A_init, v_init, noise_init, pi0, w, max_stack=100, max_iter=10
         b_full = np.repeat(list(chain(*fluo)),stack_depth)
         F_square = np.zeros((K,K))
         b_vec = np.zeros(K)
-        print(F_square)
-        print(F_full[0:10])
-        sys.exit(1)
         for k in xrange(K):
             F_square[k,:] = np.sum(F_full * F_full[:, k][:, np.newaxis] * wt_full[:, np.newaxis], axis=0)
             b_vec[k] =  np.sum(F_full[:,k] * wt_full * b_full)
@@ -421,7 +418,7 @@ def cpEM_BW(fluo, A_init, v_init, noise_init, pi0, w, max_stack=100, max_iter=10
                 total_time += loop_time
         iter += 1
 
-    return(A_list, v_list, logL_list, iter, total_time)
+    return(A_list, v_list, [noise_init], logL_list, iter, total_time)
 
 if __name__ == '__main__':
     # memory

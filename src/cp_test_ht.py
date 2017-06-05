@@ -126,7 +126,7 @@ class RPFinalBase(object):
 
 #-------------------------------------"True" Variable Definitions------------------------------------------------------#
 class Eve2Exp(object):
-    def __init__(self, n_states, dt, n_traces=50, tr_len=200):
+    def __init__(self, n_states, dt, n_traces=1, tr_len=20):
         #elongation time
         self.t_elong = 160
         # memory
