@@ -1,0 +1,2 @@
+('v_prior', [0, 40.0])('n_inf', 100)('K', 2)('v_temp', 1)('A_temp', 2)('sigma_prior', 64.0)('sigma_temp', 0.25)('A_prior', array([[ 0.8,  0.2],
+       [ 0.2,  0.8]]))

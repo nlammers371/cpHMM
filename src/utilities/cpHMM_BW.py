@@ -403,6 +403,8 @@ def cpEM_BW(fluo, A_init, v_init, noise_init, pi0, w, max_stack=100, max_iter=10
         logL_list.append(logL)
         #Check % improvement in logL
         delta = (logL_list[iter-1]-logL) / logL_list[iter-1]
+        loop_time = time.time() - loop_start_time
+        total_time += loop_time
         if delta < 0:
             if verbose:
                 print("Warning: Non-monotonic behavior in likelihood")
@@ -413,9 +415,8 @@ def cpEM_BW(fluo, A_init, v_init, noise_init, pi0, w, max_stack=100, max_iter=10
                 print(abs(delta))
                 print(v_new)
                 print(A_new)
-                loop_time = time.time() - loop_start_time
                 print(loop_time)
-                total_time += loop_time
+
         iter += 1
 
     return(A_list, v_list, [noise_init], logL_list, iter, total_time)
