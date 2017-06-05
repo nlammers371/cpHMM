@@ -20,15 +20,15 @@ test_name = 'full_gene'
 #test_name = 'basic_eve_10sec'
 ###Routine Params
 #Specify whether you wish to use truncated BW or Stack Decoder Viterbi
-model = 'bw'
+model = 'viterbi'
 #Conduct initialization inference?
 init_inference = False
 #Num Independent Runs for final inference step
-final_iters = 50
+final_iters = 500
 #Num Paths to Track for final inf
-f_stack_size = 15
+f_stack_size = 750
 #Estimate Noise in Final Sim?
-est_sigma_final = 0
+est_sigma_final = 1
 ###########Initialization##################
 #If using initialization inference, specify kind of inference
 model_init = 'viterbi'
@@ -96,12 +96,12 @@ class RPInitCold(object):
             self.v_prior = [0, 40.0]
             self.A_prior = np.array([[.8, .2],
                                      [.2, .8]])
-        self.sigma_prior = self.v_prior[1]
+        self.sigma_prior = 0.625*self.v_prior[1]
 
         # Degree of flexibility to allow in param initiations (2 = +/- full variable value)
-        self.A_temp = 2
+        self.A_temp = 1
         self.v_temp = 1
-        self.sigma_temp = .25
+        self.sigma_temp = 1
 
 
 class RPFinalBase(object):
@@ -120,9 +120,9 @@ class RPFinalBase(object):
         # Estimate noise
         self.estimate_noise = est_sigma_final
         # Degree of flexibility to allow in param initiations (2 = +/- full variable value)
-        self.A_temp = 1
-        self.v_temp = 1
-        self.sigma_temp = 1
+        self.A_temp = 0.25
+        self.v_temp = 0.25
+        self.sigma_temp = 0.25
 
 #-------------------------------------"True" Variable Definitions------------------------------------------------------#
 class Eve2Exp(object):
@@ -147,7 +147,7 @@ class Eve2Exp(object):
         elif n_states == 2:
             self.v = np.array([0.0, 25.0])
         # noise
-        self.sigma = .1 * self.v[1] * self.w
+        self.sigma = .04 * self.v[1] * self.w
         # Initial stat pdf
         if n_states == 3:
             self.pi = [.8,.1,.1]
@@ -192,7 +192,7 @@ if rType == 'basic':
 if not init_inference:
     RoutineParamsInit = RPInitCold(n_states=num_states)
 else:
-    RoutineParamsInit = RPInitBase(n_states=num_states)
+    RoutineParamsInit = RPInitCold(n_states=num_states)
 
 # Set test name
 write_name = exp_type + '_' + str(num_states) + 'state_' + test_name
