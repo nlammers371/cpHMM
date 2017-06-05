@@ -14,21 +14,21 @@ import os
 import csv
 #------------------------------------------------Top Level Exp Specifications------------------------------------------#
 ###Project Params
-project_folder = 'stack_decoder_testing'
+project_folder = 'truncated_BW_testing'
 project_subfolder = 'B_realistic_scenario'
 test_name = 'full_gene'
 #test_name = 'basic_eve_10sec'
 ###Routine Params
 #Specify whether you wish to use truncated BW or Stack Decoder Viterbi
-model = 'viterbi'
+model = 'bw'
 #Conduct initialization inference?
 init_inference = False
 #Num Independent Runs for final inference step
-final_iters = 250
+final_iters = 50
 #Num Paths to Track for final inf
-f_stack_size = 750
+f_stack_size = 15
 #Estimate Noise in Final Sim?
-est_sigma_final = 1
+est_sigma_final = 0
 ###########Initialization##################
 #If using initialization inference, specify kind of inference
 model_init = 'viterbi'
@@ -36,7 +36,7 @@ model_init = 'viterbi'
 init_iters = 100
 #size init stack
 init_stack_size = 50
-###Experimental Sim Params
+###########Experimental Sim Params#################
 #num states
 num_states = 2
 #Time Resolution
@@ -101,11 +101,12 @@ class RPInitCold(object):
         # Degree of flexibility to allow in param initiations (2 = +/- full variable value)
         self.A_temp = 2
         self.v_temp = 1
-        self.sigma_temp = 1
+        self.sigma_temp = .25
 
 
 class RPFinalBase(object):
     def __init__(self, n_runs=final_iters, n_cores=cores, n_stack=f_stack_size, init_inf=init_inference):
+        self.model = model
         #initialization inf used?
         self.inf_init = init_inf
         # Max number of iterations permitted
