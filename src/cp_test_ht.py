@@ -15,15 +15,15 @@ import csv
 #------------------------------------------------Top Level Exp Specifications------------------------------------------#
 ###Project Params
 project_folder = 'stack_decoder_testing'
-project_subfolder = 'testing'
-test_name = 'test'
+project_subfolder = 'D_simple_validation_test'
+test_name = 'simp_test'
 #---------------------------------------Routine Params---------------------------------------#
 #Specify whether to use truncated BW or Stack Decoder Viterbi
 model = 'viterbi'
 #Num Independent Runs for final inference step
-final_iters = 250
+final_iters = 200
 #Num Paths to Track for final inf (Stack Decoder Only)
-decoder_stack_size = 750
+decoder_stack_size = 500
 #Depth of Alpha and Beta Matrices (Truncated Bw only)
 bw_stack_size = 20
 #Estimate Noise in Final Sim?
@@ -41,13 +41,13 @@ corr = 1
 #num activity states
 num_states = 2
 #Time Resolution
-dT = 10.2
+dT = 5.1
 #Number of Traces
 n_traces = 50
 #Trace Length (in time steps)
 trace_length = 200
 #set level of system noise (relative to w*v[1])
-snr = .05
+snr = .025
 #Type of rate matrix
 exp_type = 'eve2'
 #Routine Param Type
@@ -171,7 +171,7 @@ def runit_viterbi(init_set, fluo,pi,est_noise):
                                                                                use_viterbi=0,
                                                                                estimate_noise=est_noise,
                                                                                n_groups=5,
-                                                                               max_stack=RoutineParamsFinal.max_stack,
+                                                                               max_stack=RoutineParamsFinal.max_decoder_stack,
                                                                                max_iter=RoutineParamsFinal.max_iter,
                                                                                eps=10e-4)
 
@@ -187,7 +187,7 @@ def runit_bw(init_set, fluo,pi,est_noise):
                                                                        noise_init=sigma_init,
                                                                        pi0=pi,
                                                                        w=expClass.w,
-                                                                       max_stack=RoutineParamsFinal.max_stack,
+                                                                       max_stack=RoutineParamsFinal.max_bw_stack,
                                                                        max_iter=RoutineParamsFinal.max_iter,
                                                                        eps=10e-4)
 
@@ -253,7 +253,7 @@ if __name__ == "__main__":
         R_init = R_init - np.diag(np.diag(R_init)) - np.diag(np.sum(R_init - np.diag(np.diag(R_init)),axis=0))
         A_init = sp.linalg.expm(R_init*dT)
 
-        sigma_init = snr*nine_five_p*deltaSig
+        sigma_init = snr*nine_five_p*deltaSig*(1.0 - (np.random.rand()-.5) / 2.0)
         init_list.append([A_init, v_init, sigma_init, R_init])
 
     # -------------------------------------------Conduct Inference-----------------------------------------------------#
