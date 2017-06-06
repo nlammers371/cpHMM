@@ -76,6 +76,6 @@ def decode_cp(fluo, A_log, pi0_log, v, w, noise, stack_depth, alpha=0):
         v_out.append([v[i] for i in Stack[-1][1][w:]])
         emissions = [v[t] for t in Stack[-1][1]]
         f_cp = np.convolve(kernel[::-1], emissions, mode='full')
-        f_cp = f_cp[w:]
+        f_cp = f_cp[w:-w+1]
         f_out.append(f_cp)
     return(seq_out, f_out, v_out, logL_out)

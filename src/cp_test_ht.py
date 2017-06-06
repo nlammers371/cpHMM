@@ -14,18 +14,18 @@ import os
 import csv
 #------------------------------------------------Top Level Exp Specifications------------------------------------------#
 ###Project Params
-project_folder = 'stack_decoder_testing'
-project_subfolder = 'D_simple_validation_test'
-test_name = 'simp_test_alpha'
+project_folder = 'method_validation'
+project_subfolder = 'A_level_comparison'
+test_name = 'stack_test'
 #---------------------------------------Routine Params---------------------------------------#
 #Specify whether to use truncated BW or Stack Decoder Viterbi
 model = 'viterbi'
 #Num Independent Runs for final inference step
-final_iters = 100
+final_iters = 1
 #Num Paths to Track for final inf (Stack Decoder Only)
 decoder_stack_size = 250
 #Depth of Alpha and Beta Matrices (Truncated Bw only)
-bw_stack_size = 20
+bw_stack_size = 9
 #Estimate Noise in Final Sim?
 est_sigma_final = 1
 #Set prior regarding switching time scale (in seconds)
@@ -37,13 +37,13 @@ sigma_temp = 1
 
 #-------------------------------------Experimental Sim Params-------------------------------------------#
 #Fraction of total mem time steps needed to transcribe MS2
-alpha_frac = 60.0 / 204.0
+alpha_frac = 0
 #Set Corr term between two promoters (1 = independence, >1 = pos correlation, <1 = negative correlation)
 corr = 1
 #num activity states
-num_states = 2
+num_states = 3
 #Time Resolution
-dT = 5.1
+dT = 10.1
 #Number of Traces
 n_traces = 50
 #Trace Length (in time steps)
@@ -51,11 +51,11 @@ trace_length = 200
 #set level of system noise (relative to w*v[1])
 snr = .05
 #Type of rate matrix
-exp_type = 'eve2'
+exp_type = 'eve2short'
 #Routine Param Type
 rType = 'basic'
 #Set Core Num
-cores = 16 #multiprocessing.cpu_count()
+cores = multiprocessing.cpu_count()
 class RPFinalBase(object):
     def __init__(self):
         self.model = model
@@ -96,8 +96,8 @@ class Eve2ExpRealistic(object):
         # Set transition rate matrix for system
         if num_states == 3:
             self.R = np.array([[-.008, .009*corr, 0.0],
-                               [.006, -.014*corr, .04],
-                               [0.0, .005*corr, -.04]]) * self.dt
+                               [.008, -.014*corr, .04],
+                               [0.0,   .005*corr, -.04]]) * self.dt
 
         elif num_states == 2:
             self.R = np.array([[-.004, .014],
@@ -139,7 +139,7 @@ class Eve2ExpShort(object):
         # Set transition rate matrix for system
         if num_states == 3:
             self.R = np.array([[-.008, .009*corr, 0.0],
-                               [.006, -.014*corr, .04],
+                               [.008, -.014*corr, .04],
                                [0.0, .005*corr, -.04]]) * self.dt
 
         elif num_states == 2:
@@ -197,7 +197,9 @@ class GenericExp(object):
 #-----------------------------------------------Write Paths------------------------------------------------------------#
 if exp_type == 'eve2':
     expClass = Eve2ExpRealistic()
-else:
+elif exp_type == 'eve2short':
+    expClass = Eve2ExpShort()
+elif exp_type == 'generic':
     expClass = GenericExp()
 
 RoutineParamsFinal = RPFinalBase()
@@ -269,8 +271,8 @@ if __name__ == "__main__":
         R_flat = np.reshape(expClass.R / dT, expClass.K ** 2).tolist()
         row = list(chain(*[R_flat, expClass.v.tolist(), [expClass.sigma], expClass.pi]))
         writer.writerow(row)
-    # ------------------------------------------Generate Traces---------------------------------------------------------#
-    promoter_states, fluo_states, promoter_states_discrete, fluo_states_nn = \
+
+    _, fluo_states, _, _ = \
         generate_traces_gill(expClass.w, expClass.T, expClass.batch_size, r_mat=expClass.R, v=expClass.v,
                              noise_level=expClass.sigma, alpha=expClass.alpha, pi0=expClass.pi)
 
@@ -279,8 +281,11 @@ if __name__ == "__main__":
     nine_five_p = np.percentile(list(chain(*fluo_states)), 95)
     if expClass.K == 2:
         v_prior = np.array([0,nine_five_p / expClass.w])
-    elif expClass == 3:
+    elif expClass.K == 3:
         v_prior = np.array([0, nine_five_p / expClass.w, 2 * nine_five_p / expClass.w])
+    else:
+        print("Warning: Undefined or improper state num value")
+        sys.exit(1)
     # Use rate prior to ensure that all transition prob matrices used for initialization
     # equate to a Rate matrix of proper form
     R_diag = 1.0 / switch_scale
