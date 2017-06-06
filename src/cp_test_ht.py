@@ -26,7 +26,7 @@ init_inference = False
 #Num Independent Runs for final inference step
 final_iters = 250
 #Num Paths to Track for final inf
-f_stack_size = 750
+f_stack_size = 100
 #Estimate Noise in Final Sim?
 est_sigma_final = 1
 ###########Initialization##################
@@ -94,8 +94,8 @@ class RPInitCold(object):
                                     [.05, .08, .8]])
         elif n_states == 2:
             self.v_prior = [0, 35.0]
-            self.A_prior = np.array([[.90, .90],
-                                     [.1, .1]])
+            self.A_prior = np.array([[.90, .10],
+                                     [.1, .9]])
         self.sigma_prior = 25.0 #0.625*self.v_prior[1]
 
         # Degree of flexibility to allow in param initiations (2 = +/- full variable value)
@@ -194,7 +194,7 @@ if rType == 'basic':
 if not init_inference:
     RoutineParamsInit = RPInitCold(n_states=num_states)
 else:
-    RoutineParamsInit = RPInitBase(n_states=num_states)
+    RoutineParamsInit = RPInitCold(n_states=num_states)
 
 # Set test name
 write_name = exp_type + '_' + str(num_states) + 'state_' + test_name
@@ -359,7 +359,7 @@ if __name__ == "__main__":
             writer = csv.writer(init_out)
             for n in xrange(RoutineParamsFinal.n_inf):
                 results = inf_list[n]
-                tr_flat = np.reshape(sp.linalg.logm(results[0]) / dT, RoutineParamsInit.K ** 2).tolist()
+                tr_flat = np.reshape(results[0], RoutineParamsInit.K ** 2).tolist()
                 row = list(chain(*[tr_flat, inf_results[n][1].tolist(), [inf_results[n][2]], expClass.pi]))
                 writer.writerow(row)
 

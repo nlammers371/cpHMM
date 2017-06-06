@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="91ca2321-f706-43c3-8045-f85804568498" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/results/truncated_BW_testing/B_realistic_scenario/eve2_2state_full_gene_1496645974.6/true_values.csv" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/.idea/workspace.xml" afterPath="$PROJECT_DIR$/src/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/cp_test_ht.py" afterPath="$PROJECT_DIR$/src/cp_test_ht.py" />
     </list>
