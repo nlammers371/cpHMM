@@ -55,7 +55,7 @@ exp_type = 'eve2short'
 #Routine Param Type
 rType = 'basic'
 #Set Core Num
-cores = multiprocessing.cpu_count()
+cores = 20 #multiprocessing.cpu_count()
 class RPFinalBase(object):
     def __init__(self):
         self.model = model
