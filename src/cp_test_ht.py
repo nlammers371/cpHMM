@@ -21,9 +21,9 @@ test_name = 'simp_test_alpha'
 #Specify whether to use truncated BW or Stack Decoder Viterbi
 model = 'viterbi'
 #Num Independent Runs for final inference step
-final_iters = 200
+final_iters = 100
 #Num Paths to Track for final inf (Stack Decoder Only)
-decoder_stack_size = 500
+decoder_stack_size = 250
 #Depth of Alpha and Beta Matrices (Truncated Bw only)
 bw_stack_size = 20
 #Estimate Noise in Final Sim?
@@ -36,6 +36,8 @@ v_temp = 1
 sigma_temp = 1
 
 #-------------------------------------Experimental Sim Params-------------------------------------------#
+#Fraction of total mem time steps needed to transcribe MS2
+alpha_frac = 60.0 / 204.0
 #Set Corr term between two promoters (1 = independence, >1 = pos correlation, <1 = negative correlation)
 corr = 1
 #num activity states
@@ -53,7 +55,7 @@ exp_type = 'eve2'
 #Routine Param Type
 rType = 'basic'
 #Set Core Num
-cores = 1 #multiprocessing.cpu_count()
+cores = 16 #multiprocessing.cpu_count()
 class RPFinalBase(object):
     def __init__(self):
         self.model = model
@@ -85,6 +87,8 @@ class Eve2ExpRealistic(object):
         self.t_elong = 160
         # memory
         self.w = int(np.round(self.t_elong / dT))
+        # alpha
+        self.alpha = alpha_frac * self.w
         # Fix trace length for now
         self.T = trace_length
         # Number of traces per batch
@@ -126,6 +130,8 @@ class Eve2ExpShort(object):
         self.t_elong = 50
         # memory
         self.w = int(np.round(self.t_elong / dT))
+        # alpha
+        self.alpha = alpha_frac * self.w
         # Fix trace length for now
         self.T = trace_length
         # Number of traces per batch
@@ -165,6 +171,8 @@ class GenericExp(object):
         self.t_elong = 160
         # memory
         self.w = int(self.t_elong / dT)
+        # alpha
+        self.alpha = alpha_frac * self.w
         # Fix trace length for now
         self.T = trace_length
         # Number of traces per batch
@@ -213,6 +221,7 @@ def runit_viterbi(init_set, fluo,pi,est_noise):
                                                                                use_viterbi=0,
                                                                                estimate_noise=est_noise,
                                                                                n_groups=5,
+                                                                               alpha=expClass.alpha,
                                                                                max_stack=RoutineParamsFinal.max_decoder_stack,
                                                                                max_iter=RoutineParamsFinal.max_iter,
                                                                                eps=10e-4)
@@ -257,13 +266,13 @@ if __name__ == "__main__":
     # Write true param values
     with open(os.path.join(writepath, 'true_values.csv'), 'wb') as inf_out:
         writer = csv.writer(inf_out)
-        R_flat = np.reshape(expClass.R, expClass.K ** 2).tolist()
+        R_flat = np.reshape(expClass.R / dT, expClass.K ** 2).tolist()
         row = list(chain(*[R_flat, expClass.v.tolist(), [expClass.sigma], expClass.pi]))
         writer.writerow(row)
     # ------------------------------------------Generate Traces---------------------------------------------------------#
     promoter_states, fluo_states, promoter_states_discrete, fluo_states_nn = \
         generate_traces_gill(expClass.w, expClass.T, expClass.batch_size, r_mat=expClass.R, v=expClass.v,
-                             noise_level=expClass.sigma, alpha=0.0, pi0=expClass.pi)
+                             noise_level=expClass.sigma, alpha=expClass.alpha, pi0=expClass.pi)
 
     # -------------------------------------Conduct First Pass Initialization Values----------------------------------------------#
     # First Calculate Prior for v's based upon statistics of experimental data
