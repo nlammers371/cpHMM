@@ -114,7 +114,7 @@ def cpEM_viterbi(fluo, A_init, v_init, noise, pi0, w=1, use_viterbi=1, max_stack
 
 
 # Add some bells and whistles to base model
-def cpEM_viterbi_full(fluo, A_init, v_init, noise_init, pi0, n_groups=1, estimate_noise=0, w=1, use_viterbi=1, max_stack=100, max_iter=1000, eps=10e-4, verbose=False):
+def cpEM_viterbi_full(fluo, A_init, v_init, noise_init, pi0, n_groups=1, estimate_noise=0, w=1, alpha=0, use_viterbi=1, max_stack=100, max_iter=1000, eps=10e-4, verbose=False):
     """
     :param fluo: time series of fluorescent intensities (list of lists)
     :param A_init: Initial guess at the system's transition probability matrix (KxK)
@@ -122,6 +122,7 @@ def cpEM_viterbi_full(fluo, A_init, v_init, noise_init, pi0, n_groups=1, estimat
     :param noise: Standard Deviation of fluo emissions (Taken as given at this stage)
     :param pi0: Initial state PDF (Taken as given)
     :param w: memory of system in time steps
+    :param alpha: num time steps to transcript MS2 loops
     :param max_stack: if stack decoder is used for fitting, sets max stack size
     :param max_iter: Maximum number of iterations permitted
     :param eps: Termination criteria--minimum permissible percent change in estimated params
@@ -135,10 +136,17 @@ def cpEM_viterbi_full(fluo, A_init, v_init, noise_init, pi0, n_groups=1, estimat
     v_list = [v_init]
     logL_list = [-np.Inf]
     noise_list = [noise_init]
-    #determine number of traces to hold out from training each iteration
-    n_traces = len(fluo)
-    trace_ids = range(n_traces)
+    #Calculate alpha kernel
+    if alpha > 0:
+        alpha_vec = [(float(i + 1) / alpha + (float(i) / alpha)) / 2.0 * (i < alpha) * ((i + 1) <= alpha)
+                     + ((alpha - i)*(1 + float(i) / alpha) / 2.0 + i + 1 - alpha) * (i < alpha) * (i + 1 > alpha)
+                     + 1 * (i >= alpha) for i in xrange(w)]
 
+    else:
+
+        alpha_vec = np.array([1.0]*w)
+    kernel = np.ones(w)*alpha_vec
+    kernel = kernel[::-1]
     #If using viterbi alg, preallocate lookup tables
     if use_viterbi:
         cp_array, to_from, cp_init = viterbi_cp_init(K, w)
@@ -146,8 +154,6 @@ def cpEM_viterbi_full(fluo, A_init, v_init, noise_init, pi0, n_groups=1, estimat
     delta = 1
     iter = 1
     while iter < max_iter and abs(delta) > eps:
-        fluo_ids = np.random.choice(trace_ids, n_traces - n_traces/n_groups, replace=False)
-        fluo_samp = np.array(fluo)[fluo_ids]
         v_curr = v_list[iter - 1]
         A_log = A_list[iter - 1]
         sigma = noise_list[iter-1]
@@ -157,13 +163,13 @@ def cpEM_viterbi_full(fluo, A_init, v_init, noise_init, pi0, n_groups=1, estimat
         if use_viterbi:
             if w > 3:
                 print("Warning: Attempting viterbi fits for high complexity data. Stack decoder recommended")
-            _, _, seq_out, v_out, logL_out = viterbi_compound(fluo_samp, A_log, v_curr, sigma, pi0_log, w=w, cp_array=cp_array, to_from=to_from, cp_init=cp_init)
+            _, _, seq_out, v_out, logL_out = viterbi_compound(fluo, A_log, v_curr, sigma, pi0_log, w=w, cp_array=cp_array, to_from=to_from, cp_init=cp_init, alpha=alpha)
         else:
-            seq_out, f_out, v_out, logL_out = decode_cp(fluo_samp, A_log, pi0_log, v_curr, w, sigma, stack_depth=max_stack)
+            seq_out, f_out, v_out, logL_out = decode_cp(fluo, A_log, pi0_log, v_curr, w, sigma, stack_depth=max_stack)
 
         # -------------------------------Update Transition Probability Estimates----------------------------------------
         A_new = np.zeros_like(A_log) + min_val
-        for f, fluo_vec in enumerate(fluo_samp):
+        for f, fluo_vec in enumerate(fluo):
             t_vec = range(1,len(fluo_vec))
             seq_fit = seq_out[f]
             #Count relevant transition events
@@ -183,20 +189,21 @@ def cpEM_viterbi_full(fluo, A_init, v_init, noise_init, pi0, n_groups=1, estimat
         b = []
         F_full = []
         sigmas = []
-        for f, fluo_vec in enumerate(fluo_samp):
+        ct_kernel = np.array([1.0]*w)
+        for f, fluo_vec in enumerate(fluo):
             b.append(fluo_vec)
-            s_lookup = list(chain(*[[0]*(w-1), seq_out[f]]))
-            s_lookup = np.array(s_lookup)
-            v_lookup = list(chain(*[[0]*w, v_out[f]]))
-            v_lookup = np.array(v_lookup)
+            cp_est = np.array(f_out[f])
+            s_lookup = np.array([0]*(w-1) + seq_out[f])
             if estimate_noise:
-                sig = np.square(np.array(fluo_vec) - (np.cumsum(v_lookup[w:]) - np.cumsum(v_lookup[:-w])))
+                sig = np.square(np.array(fluo_vec) - cp_est)
                 sigmas.append(sig)
-            for t in xrange(len(fluo_vec)):
-                ct = [0]*K
-                for k in xrange(K):
-                    ct[k] = len(np.where(s_lookup[t:t+w]==k)[0])
-                F_full.append(ct)
+            #Get state Counts
+            ct_array = np.zeros((len(fluo_vec),K))
+            for k in xrange(K):
+                ct =  np.convolve(ct_kernel,1*(s_lookup==k),mode='full')
+                ct_array[:,k] = ct[:len(fluo_vec)]
+            F_full.append([element for element in ct_array.tolist()])
+
         if estimate_noise:
             #Find mean sigma
             sigma_new = min(np.sqrt(np.mean(list(chain(*sigmas)))),noise_init)
@@ -217,7 +224,6 @@ def cpEM_viterbi_full(fluo, A_init, v_init, noise_init, pi0, n_groups=1, estimat
             v_new, residuals, rank, singular_vals = np.linalg.lstsq(F_square,b_vec)
 
         #-------------------------------------Update Noise Estimate----------------------------------------------------$
-
         v_list.append(v_new)
         A_list.append(np.log(A_new))
         if estimate_noise:
