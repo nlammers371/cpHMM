@@ -47,13 +47,13 @@ n_traces = 50
 #Trace Length (in time steps)
 trace_length = 200
 #set level of system noise (relative to w*v[1])
-snr = .025
+snr = .05
 #Type of rate matrix
 exp_type = 'eve2'
 #Routine Param Type
 rType = 'basic'
 #Set Core Num
-cores = 20 #multiprocessing.cpu_count()
+cores = 1 #multiprocessing.cpu_count()
 class RPFinalBase(object):
     def __init__(self):
         self.model = model
@@ -75,7 +75,7 @@ class RPFinalBase(object):
         self.sigma_temp = sigma_temp
 
 #-------------------------------------"True" Variable Definitions------------------------------------------------------#
-class Eve2Exp(object):
+class Eve2ExpRealistic(object):
     def __init__(self):
         #Degree of correlation btw two promoters (only relevant for 3+ state case)
         self.promoter_correlation = corr
@@ -84,7 +84,7 @@ class Eve2Exp(object):
         #elongation time
         self.t_elong = 160
         # memory
-        self.w = int(self.t_elong / dT)
+        self.w = int(np.round(self.t_elong / dT))
         # Fix trace length for now
         self.T = trace_length
         # Number of traces per batch
@@ -114,6 +114,48 @@ class Eve2Exp(object):
             self.pi = [.5, .5]
 
         self.K = num_states
+
+#Class with assuming low mem but otherwise realistic param values
+class Eve2ExpShort(object):
+    def __init__(self):
+        #Degree of correlation btw two promoters (only relevant for 3+ state case)
+        self.promoter_correlation = corr
+        #Temporal Resolution of Experiment
+        self.dt = dT
+        #elongation time
+        self.t_elong = 50
+        # memory
+        self.w = int(np.round(self.t_elong / dT))
+        # Fix trace length for now
+        self.T = trace_length
+        # Number of traces per batch
+        self.batch_size = n_traces
+        # Set transition rate matrix for system
+        if num_states == 3:
+            self.R = np.array([[-.008, .009*corr, 0.0],
+                               [.006, -.014*corr, .04],
+                               [0.0, .005*corr, -.04]]) * self.dt
+
+        elif num_states == 2:
+            self.R = np.array([[-.004, .014],
+                               [.004, -.014]]) * self.dt
+        # Set emission levels
+        if num_states == 3:
+            self.v = np.array([0.0, 25.0, 50.0])
+        elif num_states == 2:
+            self.v = np.array([0.0, 25.0])
+        #snr
+        self.snr = snr
+        # noise
+        self.sigma = snr * self.v[1] *self.w
+        # Initial stat pdf
+        if num_states == 3:
+            self.pi = [.33,.33,.34]
+        elif num_states == 2:
+            self.pi = [.5, .5]
+
+        self.K = num_states
+
 
 class GenericExp(object):
     def __init__(self):
@@ -146,7 +188,7 @@ class GenericExp(object):
             self.pi = [.5,.5]
 #-----------------------------------------------Write Paths------------------------------------------------------------#
 if exp_type == 'eve2':
-    expClass = Eve2Exp()
+    expClass = Eve2ExpRealistic()
 else:
     expClass = GenericExp()
 
@@ -270,7 +312,7 @@ if __name__ == "__main__":
     print("Runtime: " + str(time.time() - init_time))
 
     # Find routine with highest likelihood score
-    logL_list = np.array([inf_results[i][2] for i in xrange(RoutineParamsFinal.n_inf)])
+    logL_list = np.array([inf_results[i][3] for i in xrange(RoutineParamsFinal.n_inf)])
     max_id = np.argmax(logL_list)
     best_results = inf_results[max_id]
     print("Optimal Params: ")
