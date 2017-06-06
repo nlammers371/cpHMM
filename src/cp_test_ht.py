@@ -21,7 +21,7 @@ test_name = 'stack_test'
 #Specify whether to use truncated BW or Stack Decoder Viterbi
 model = 'viterbi'
 #Num Independent Runs for final inference step
-final_iters = 1
+final_iters = 250
 #Num Paths to Track for final inf (Stack Decoder Only)
 decoder_stack_size = 250
 #Depth of Alpha and Beta Matrices (Truncated Bw only)
