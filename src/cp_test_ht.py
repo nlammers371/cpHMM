@@ -218,7 +218,7 @@ def runit_viterbi(init_set, fluo,pi,est_noise):
                                                                                A_init=A_init,
                                                                                v_init=v_init,
                                                                                noise_init=sigma_init,
-                                                                               pi0=pi,
+                                                                               pi0=expClass.pi,
                                                                                w=expClass.w,
                                                                                use_viterbi=0,
                                                                                estimate_noise=est_noise,
@@ -308,7 +308,6 @@ if __name__ == "__main__":
         R_init = R_prior*deltaR
         R_init = R_init - np.diag(np.diag(R_init)) - np.diag(np.sum(R_init - np.diag(np.diag(R_init)),axis=0))
         A_init = sp.linalg.expm(R_init*dT)
-
         sigma_init = snr*nine_five_p*deltaSig*(1.0 - (np.random.rand()-.5) / 2.0)
         init_list.append([A_init, v_init, sigma_init, R_init])
 
