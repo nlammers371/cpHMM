@@ -16,7 +16,7 @@ import csv
 ###Project Params
 project_folder = 'stack_decoder_testing'
 project_subfolder = 'D_simple_validation_test'
-test_name = 'simp_test'
+test_name = 'simp_test_alpha'
 #---------------------------------------Routine Params---------------------------------------#
 #Specify whether to use truncated BW or Stack Decoder Viterbi
 model = 'viterbi'
