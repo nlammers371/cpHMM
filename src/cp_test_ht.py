@@ -22,15 +22,10 @@ test_name = 'test'
 model = 'viterbi'
 #Num Independent Runs for final inference step
 final_iters = 250
-<<<<<<< HEAD
-#Num Paths to Track for final inf
-f_stack_size = 100
-=======
 #Num Paths to Track for final inf (Stack Decoder Only)
 decoder_stack_size = 750
 #Depth of Alpha and Beta Matrices (Truncated Bw only)
 bw_stack_size = 20
->>>>>>> 353c1c37042c58bb4eebca5a375fcc5273939c6f
 #Estimate Noise in Final Sim?
 est_sigma_final = 1
 #Set prior regarding switching time scale (in seconds)
@@ -59,66 +54,6 @@ exp_type = 'eve2'
 rType = 'basic'
 #Set Core Num
 cores = 20 #multiprocessing.cpu_count()
-<<<<<<< HEAD
-class RPInitBase(object):
-    def __init__(self, n_states, n_runs=init_iters, n_cores=cores, n_stack=init_stack_size):
-        # ------------------------------------Routine Variable Definitions------------------------------------------------------#
-        #num_states
-        self.K = n_states
-        #Max number of iterations permitted
-        self.max_iter=1000
-        #N Separate Inferences
-        self.n_inf = n_runs
-        # set num cores to use
-        self.num_inf_cores = n_cores
-        #Max num permitted paths in stack
-        self.max_stack = n_stack
-        #Estimate noise
-        self.estimate_noise = 1
-        # ------------------------------------------Inference Init Variables----------------------------------------------------#
-        if n_states == 3:
-            self.v_prior = np.array([0, 25.0, 50.0])
-            self.A_prior = np.array([[.8, .1, .1],
-                                        [.1, .8, .1],
-                                        [.1, .1, .8]])
-        elif n_states == 2:
-            self.v_prior = [0, 25.0]
-            self.A_prior = np.array([[.8, .2],
-                                     [.2, .8]])
-            self.sigma_prior = self.v_prior[1]
-
-        # Degree of flexibility to allow in param initiations (2 = +/- full variable value)
-        self.A_temp = 1.5
-        self.v_temp = .25
-        self.sigma_temp = .25
-
-
-class RPInitCold(object):
-    def __init__(self, n_states,  n_cores=cores):
-        # ------------------------------------Routine Variable Definitions------------------------------------------------------#
-        self.n_inf = 100
-        #num_states
-        self.K = n_states
-        #---------------------Inference Init Variables----------------------------------------------------#
-        if n_states == 3:
-            self.v_prior = np.array([0, 25.0, 50.0])
-            self.A_prior = np.array([[.9, .07, .1],
-                                    [.05, .85, .1],
-                                    [.05, .08, .8]])
-        elif n_states == 2:
-            self.v_prior = [0, 35.0]
-            self.A_prior = np.array([[.90, .10],
-                                     [.1, .9]])
-        self.sigma_prior = 25.0 #0.625*self.v_prior[1]
-
-        # Degree of flexibility to allow in param initiations (2 = +/- full variable value)
-        self.A_temp = 1.5
-        self.v_temp = 1.5
-        self.sigma_temp = 1.5
-
-
-=======
->>>>>>> 353c1c37042c58bb4eebca5a375fcc5273939c6f
 class RPFinalBase(object):
     def __init__(self):
         self.model = model
@@ -177,7 +112,7 @@ class Eve2Exp(object):
             self.pi = [.33,.33,.34]
         elif num_states == 2:
             self.pi = [.5, .5]
-        
+
         self.K = num_states
 
 class GenericExp(object):
@@ -215,14 +150,7 @@ if exp_type == 'eve2':
 else:
     expClass = GenericExp()
 
-<<<<<<< HEAD
-if not init_inference:
-    RoutineParamsInit = RPInitCold(n_states=num_states)
-else:
-    RoutineParamsInit = RPInitCold(n_states=num_states)
-=======
 RoutineParamsFinal = RPFinalBase()
->>>>>>> 353c1c37042c58bb4eebca5a375fcc5273939c6f
 
 # Set test name
 write_name = exp_type + '_' + str(num_states) + 'state_' + test_name
@@ -371,16 +299,10 @@ if __name__ == "__main__":
         with open(os.path.join(writepath, 'initializations.csv'), 'wb') as init_out:
             writer = csv.writer(init_out)
             for n in xrange(RoutineParamsFinal.n_inf):
-<<<<<<< HEAD
-                results = inf_list[n]
-                tr_flat = np.reshape(results[0], RoutineParamsInit.K ** 2).tolist()
-                row = list(chain(*[tr_flat, inf_results[n][1].tolist(), [inf_results[n][2]], expClass.pi]))
-=======
                 results = init_list[n]
                 A_flat = np.reshape(results[0], expClass.K ** 2).tolist()
                 R_flat = np.reshape(results[-1], expClass.K ** 2).tolist()
                 row = list(chain(*[tr_flat, inf_results[n][1].tolist(), [inf_results[n][2]], expClass.pi, R_flat]))
->>>>>>> 353c1c37042c58bb4eebca5a375fcc5273939c6f
                 writer.writerow(row)
 
     # Save Simulation Variables to File
