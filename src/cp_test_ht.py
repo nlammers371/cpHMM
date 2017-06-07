@@ -18,7 +18,7 @@ import csv
 ###Project Params
 project_folder = 'method_validation'
 project_subfolder = 'ZZ_test_run'
-test_name = 'bw_test'
+test_name = 'bw_test_stability'
 #---------------------------------------Routine Params---------------------------------------#
 #Specify whether to use truncated BW or Stack Decoder Viterbi
 model = 'bw'
@@ -27,7 +27,7 @@ final_iters = 5
 #Num Paths to Track for final inf (Stack Decoder Only)
 decoder_stack_size = 25
 #Depth of Alpha and Beta Matrices (Truncated Bw only)
-bw_stack_size = 20
+bw_stack_size = 9
 #Estimate Noise in Final Sim?
 est_sigma_final = 1
 #Set prior regarding switching time scale (in seconds)
@@ -47,7 +47,7 @@ num_states = 3
 #Time Resolution
 dT = 10.1
 #Number of Traces
-n_traces = 20
+n_traces = 5
 #Trace Length (in time steps)
 trace_length = 200
 #set level of system noise (relative to w*v[1])
@@ -216,7 +216,7 @@ writepath = os.path.join(outpath, write_name)
 def runit_viterbi(init_set, fluo,pi,est_noise):
     A_init = init_set[0]
     v_init = init_set[1]
-    sigma_init = init_set[2]
+    sigma_init = init_set[2][0]
     A_list, v_list, logL_list, sigma_list, iters, run_time = cpEM_viterbi_full(fluo=fluo,
                                                                                A_init=A_init,
                                                                                v_init=v_init,
@@ -231,7 +231,7 @@ def runit_viterbi(init_set, fluo,pi,est_noise):
                                                                                max_iter=RoutineParamsFinal.max_iter,
                                                                                eps=RoutineParamsFinal.eps)
 
-    return np.exp(A_list[-1]), v_list[-1], sigma_list[-1], logL_list[-1], iters, run_time
+    return (np.exp(A_list[-1]), v_list[-1], sigma_list[-1], logL_list[-1], iters, run_time)
 
 def runit_bw(init_set, fluo,pi,est_noise):
 
@@ -240,7 +240,7 @@ def runit_bw(init_set, fluo,pi,est_noise):
 
     sigma_init = init_set[2][0]
 
-    A_list, v_list, logL_list, sigma_list, iters, run_time = cpEM_BW(  fluo=fluo,
+    A_list, v_list, sigma_list, logL_list, iters, run_time = cpEM_BW(  fluo=fluo,
                                                                        A_init=A_init,
                                                                        v_init=v_init,
                                                                        noise_init=sigma_init,
@@ -252,7 +252,7 @@ def runit_bw(init_set, fluo,pi,est_noise):
                                                                        eps=RoutineParamsFinal.eps,
                                                                        verbose=0)
 
-    return np.exp(A_list[-1]), v_list[-1], sigma_list[-1], logL_list[-1], iters, run_time
+    return (np.exp(A_list[-1]), v_list[-1], sigma_list[-1], logL_list[-1], iters, run_time)
 
 #Convenience function for truncated random normal pdf
 def t_norm(lower, upper, mu, sigma, N):

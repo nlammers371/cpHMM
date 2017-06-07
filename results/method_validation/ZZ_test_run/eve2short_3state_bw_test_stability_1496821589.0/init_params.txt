@@ -1,0 +1,1 @@
+('max_iter', 1000)('n_inf', 5)('R_temp', 1)('max_decoder_stack', 25)('v_temp', 1)('eps', 0.0001)('max_bw_stack', 9)('estimate_noise', 1)('sigma_temp', 1)('num_inf_cores', 20)('model', 'bw')
