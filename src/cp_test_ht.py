@@ -18,16 +18,16 @@ import csv
 ###Project Params
 project_folder = 'method_validation'
 project_subfolder = 'A_level_comparison'
-test_name = 'stack_test'
+test_name = 'bw_test'
 #---------------------------------------Routine Params---------------------------------------#
 #Specify whether to use truncated BW or Stack Decoder Viterbi
-model = 'viterbi'
+model = 'bw'
 #Num Independent Runs for final inference step
 final_iters = 250
 #Num Paths to Track for final inf (Stack Decoder Only)
 decoder_stack_size = 100
 #Depth of Alpha and Beta Matrices (Truncated Bw only)
-bw_stack_size = 9
+bw_stack_size = 27
 #Estimate Noise in Final Sim?
 est_sigma_final = 1
 #Set prior regarding switching time scale (in seconds)
