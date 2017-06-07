@@ -427,68 +427,42 @@ def cpEM_BW(fluo, A_init, v_init, noise_init, pi0, w, estimate_noise=1, max_stac
             if verbose:
                 print("Warning: Non-monotonic behavior in likelihood")
             #sys.exit(1)
-        if iter % 5 == 0:
+        if iter % 1 == 0:
             if verbose:
                 print(logL)
                 print(abs(delta))
                 print(v_new)
                 print(A_new)
+                print(sigma_new)
                 print(loop_time)
 
         iter += 1
 
-    return(A_list, v_list, noise_list, logL_list, iter, total_time)
+    return(A_list, v_list, sigma_list, logL_list, iter, total_time)
 
 if __name__ == '__main__':
     # memory
     w = 15
     # Fix 5race length for now
-    T = 100
+    T = 1000
     # Number of traces per batch
     batch_size = 2
-    #R = np.array([[-.008, .009, .01], [.006, -.014, .025], [.002, .005, -.035]]) * 10.2
-    R = np.array([[-.004, .014], [.004, -.014]]) * 10.2
+    R = np.array([[-.008, .009, .00], [.008, -.014, .035], [.0, .005, -.035]]) * 10.2
+    #R = np.array([[-.004, .014], [.004, -.014]]) * 10.2
     A = scipy.linalg.expm(R, q=None)
     print(A)
-    #v = np.array([0.0, 50.0, 100.0])
-    v = np.array([0.0, 50.0])
-    #pi = [.2, .3, .5]
-    pi = [.7, .3]
+    A_init = np.array([[.8,.2,.2],[.2,.8,.2],[.2,.2,.8]])
+    v = np.array([0.0, 50.0, 100.0])
+    #v = np.array([0.0, 50.0])
+    pi = [.2, .3, .5]
+    #pi = [.7, .3]
     K = len(v)
-    max_stack = 5
+    max_stack = 50
     sigma = 25
     promoter_states, fluo_states, promoter_states_discrete, fluo_states_nn = \
         generate_traces_gill(w, T, batch_size, r_mat=R, v=v, noise_level=sigma, alpha=0.0, pi0=pi)
 
     t_init = time.time()
     A_list, v_list, noise_list, logL_list, iter, total_time\
-        = cpEM_BW(fluo_states, A_init=A, v_init=v, noise_init=sigma*1, pi0=pi, w=w, max_stack=max_stack, max_iter=1000, eps=10e-4)
-
-    """
-    alpha_array, s_list, p_list, cf_list, Stack, F= alpha_alg_cp(fluo_vec=fluo_states[0], A_log=np.log(A), v=v, w=w,
-                                                               noise=10, pi0_log=np.log(pi), max_stack=min(K**w,max_stack))
-    print(F)
-    sys.exit(1)
-    alpha_simp = fwd_algorithm(fluo_vec=fluo_states[0], A_log=np.log(A), v=v,noise=10,pi0_log=np.log(pi))
-    #print(time.time() - t_init)
-    #print(Stack)
-    #print(s_list[-6:])
-    #print(p_list[-6:])
-    #print(cf_list[-3:])
-
-    beta_array = beta_alg_cp(fluo_vec=fluo_states[0], A_log=np.log(A), v=v, w=w, noise=10, pi0_log=np.log(pi),
-                             pointers=p_list, alpha_states=s_list, cp_fluo=cf_list, alpha_stack=Stack)
-
-    beta_simp, stuff = bkwd_algorithm(fluo_vec=fluo_states[0], A_log=np.log(A), v=v,noise=10,pi0_log=np.log(pi))
-    joint = alpha_array + beta_array
-    adjustment_vector = 0 + logsumexp(joint,axis=0)
-    #print(logsumexp(alpha_array + beta_array, axis=0) - adjustment_vector)
-    print(logsumexp(alpha_array + beta_array, axis=0) - logsumexp(alpha_array[:,-1]))
-    #print(beta_array[:,-6:])
-    #print(beta_simp[:,-6:])
-    #print(beta_array)
-
-    plt.plot(np.array(promoter_states[0]))
-    #plt.plot(np.array(fluo_states_nn[0]))
-    #plt.show()
-    """
+        = cpEM_BW(fluo_states, A_init=A_init, v_init=np.array([15.0,45.0,90.0]), noise_init=sigma*1,
+                  pi0=pi, w=w, max_stack=max_stack, estimate_noise=1, max_iter=1000, eps=10e-6, verbose=1)

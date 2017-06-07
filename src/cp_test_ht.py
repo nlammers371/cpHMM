@@ -357,7 +357,7 @@ if __name__ == "__main__":
                 results = init_list[n]
                 A_flat = np.reshape(results[0], expClass.K ** 2).tolist()
                 R_flat = np.reshape(results[-1], expClass.K ** 2).tolist()
-                row = list(chain(*[tr_flat, inf_results[n][1].tolist(), [inf_results[n][2]], expClass.pi, R_flat]))
+                row = list(chain(*[R_flat, inf_results[n][1].tolist(), [inf_results[n][2]], expClass.pi]))
                 writer.writerow(row)
 
     # Save Simulation Variables to File
