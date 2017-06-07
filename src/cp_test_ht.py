@@ -6,6 +6,7 @@ import numpy as np
 from joblib import Parallel, delayed
 import multiprocessing
 from itertools import chain
+import math
 from utilities.functions import generate_traces_gill, viterbi, viterbi_compound, viterbi_cp_init
 from utilities.cpHMM_viterbi import cpEM_viterbi, cpEM_viterbi_full
 from utilities.cpHMM_BW import cpEM_BW
@@ -21,7 +22,7 @@ test_name = 'bw_test'
 #Specify whether to use truncated BW or Stack Decoder Viterbi
 model = 'bw'
 #Num Independent Runs for final inference step
-final_iters = 2
+final_iters = 20
 #Num Paths to Track for final inf (Stack Decoder Only)
 decoder_stack_size = 25
 #Depth of Alpha and Beta Matrices (Truncated Bw only)
@@ -47,7 +48,7 @@ dT = 10.1
 #Number of Traces
 n_traces = 5
 #Trace Length (in time steps)
-trace_length = 20
+trace_length = 200
 #set level of system noise (relative to w*v[1])
 snr = .05
 #Type of rate matrix
@@ -59,6 +60,7 @@ cores = 20 #multiprocessing.cpu_count()
 class RPFinalBase(object):
     def __init__(self):
         self.model = model
+        self.eps = 10e-5
         # Max number of iterations permitted
         self.max_iter = 1000
         # N Separate Inferences
@@ -138,9 +140,9 @@ class Eve2ExpShort(object):
         self.batch_size = n_traces
         # Set transition rate matrix for system
         if num_states == 3:
-            self.R = np.array([[-.008, .009*corr, 0.0],
-                               [.008, -.014*corr, .04],
-                               [0.0, .005*corr, -.04]]) * self.dt
+            self.R = np.array([[-.008, .015*corr, 0.0],
+                               [.008, -.019*corr, .03],
+                               [0.0, .004*corr, -.03]]) * self.dt
 
         elif num_states == 2:
             self.R = np.array([[-.004, .014],
@@ -226,7 +228,7 @@ def runit_viterbi(init_set, fluo,pi,est_noise):
                                                                                alpha=expClass.alpha,
                                                                                max_stack=RoutineParamsFinal.max_decoder_stack,
                                                                                max_iter=RoutineParamsFinal.max_iter,
-                                                                               eps=10e-6)
+                                                                               eps=RoutineParamsFinal.eps)
 
     return np.exp(A_list[-1]), v_list[-1], sigma_list[-1], logL_list[-1], iters, run_time
 
@@ -237,13 +239,14 @@ def runit_bw(init_set, fluo,pi,est_noise):
     A_list, v_list, logL_list, sigma_list, iters, run_time = cpEM_BW(  fluo=fluo,
                                                                        A_init=A_init,
                                                                        v_init=v_init,
-                                                                       noise_init=sigma_init,
+                                                                       noise_init=sigma_init[0],
                                                                        pi0=expClass.pi,
                                                                        w=expClass.w,
                                                                        estimate_noise=est_noise,
                                                                        max_stack=RoutineParamsFinal.max_bw_stack,
                                                                        max_iter=RoutineParamsFinal.max_iter,
-                                                                       eps=10e-6)
+                                                                       eps=RoutineParamsFinal.eps,
+                                                                       verbose=0)
 
     return np.exp(A_list[-1]), v_list[-1], sigma_list[-1], logL_list[-1], iters, run_time
 
@@ -327,13 +330,15 @@ if __name__ == "__main__":
     print("Runtime: " + str(time.time() - init_time))
 
     # Find routine with highest likelihood score
+    print(inf_results)
     logL_list = np.array([inf_results[i][3] for i in xrange(RoutineParamsFinal.n_inf)])
+    logL_list = [value for value in logL_list if not math.isnan(value)]
+    print(logL_list)
     max_id = np.argmax(logL_list)
     best_results = inf_results[max_id]
     print("Optimal Params: ")
     print("")
     print(best_results)
-
     # Write best param estimates to csv
     with open(os.path.join(writepath, 'best_results.csv'), 'wb') as inf_out:
         writer = csv.writer(inf_out)

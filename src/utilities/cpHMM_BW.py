@@ -46,7 +46,7 @@ def alpha_alg_cp(fluo_vec, A_log, v, w, noise, pi0_log, max_stack):
             #Pad wit zeros to easy maximization computations. Will be given p weight of zero, so value irrelevant
             cf += [0]*(max_stack-len(cf))
             cf_list.append(cf)
-            alpha_array[:K,0] = pi0_log + np.array([log_L_fluo(fluo_vec[t], v[s], noise) for s in xrange(K)])
+            alpha_array[:K,0] = pi0_log + np.array([log_L_fluo(fluo_vec[t], v[s], noise).tolist() for s in xrange(K)])
             Stack = [[s] + [0]*(w-1)  for s in xrange(K)]
             # [s_{t}, s_{t-1}, s_{t-2},...s_{t-w+1}
         else:
@@ -377,9 +377,9 @@ def cpEM_BW(fluo, A_init, v_init, noise_init, pi0, w, estimate_noise=1, max_stac
                         event_id.append(K*to_state+from_state)
         event_list = np.array(event_list)
         event_id = np.array(event_id)
-        A_log_new = np.zeros((K,K))
+        A_log_new = np.zeros((K,K)) - 10e10
         for k in xrange(K**2):
-            A_log_new[k / K, k%K] = logsumexp(event_list[np.where(event_id == k)[0]])
+            A_log_new[k / K, k%K] += logsumexp(event_list[np.where(event_id == k)[0]])
         A_log_new = A_log_new - np.tile(logsumexp(A_log_new, axis=0),(K,1))
         A_new = np.exp(A_log_new)
 
