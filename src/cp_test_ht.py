@@ -17,15 +17,15 @@ import csv
 #------------------------------------------------Top Level Exp Specifications------------------------------------------#
 ###Project Params
 project_folder = 'method_validation'
-project_subfolder = 'ZZ_test_run'
-test_name = 'bw_test_stability'
+project_subfolder = 'A_level_comparison'
+test_name = 'stack_test'
 #---------------------------------------Routine Params---------------------------------------#
 #Specify whether to use truncated BW or Stack Decoder Viterbi
-model = 'bw'
+model = 'viterbi'
 #Num Independent Runs for final inference step
-final_iters = 5
+final_iters = 250
 #Num Paths to Track for final inf (Stack Decoder Only)
-decoder_stack_size = 25
+decoder_stack_size = 100
 #Depth of Alpha and Beta Matrices (Truncated Bw only)
 bw_stack_size = 9
 #Estimate Noise in Final Sim?
@@ -47,7 +47,7 @@ num_states = 3
 #Time Resolution
 dT = 10.1
 #Number of Traces
-n_traces = 5
+n_traces = 50
 #Trace Length (in time steps)
 trace_length = 200
 #set level of system noise (relative to w*v[1])
@@ -278,7 +278,7 @@ if __name__ == "__main__":
         writer = csv.writer(inf_out)
         A_flat = np.reshape(sp.linalg.expm(expClass.R*dT) , expClass.K ** 2).tolist()
         R_flat = np.reshape(expClass.R / dT, expClass.K ** 2).tolist()
-        row = list(chain(*[[1], A_flat, R_flat, expClass.v.tolist(), [expClass.sigma], expClass.pi]))
+        row = list(chain(*[[0], A_flat, R_flat, expClass.v.tolist(), [expClass.sigma], expClass.pi]))
         writer.writerow(row)
 
     _, fluo_states, _, _ = \
