@@ -377,9 +377,9 @@ def cpEM_BW(fluo, A_init, v_init, noise_init, pi0, w, estimate_noise=1, max_stac
                         event_id.append(K*to_state+from_state)
         event_list = np.array(event_list)
         event_id = np.array(event_id)
-        A_log_new = np.zeros((K,K)) - 10e10
+        A_log_new = np.zeros((K,K))
         for k in xrange(K**2):
-            A_log_new[k / K, k%K] += logsumexp(event_list[np.where(event_id == k)[0]])
+            A_log_new[k / K, k%K] = logsumexp(event_list[np.where(event_id == k)[0]])
         A_log_new = A_log_new - np.tile(logsumexp(A_log_new, axis=0),(K,1))
         A_new = np.exp(A_log_new)
 
@@ -448,7 +448,7 @@ if __name__ == '__main__':
     R = np.array([[-.008, .009, .00], [.008, -.014, .035], [.0, .005, -.035]]) * 10.2
     #R = np.array([[-.004, .014], [.004, -.014]]) * 10.2
     A = scipy.linalg.expm(R, q=None)
-    print(A)
+    #print(A)
     A_init = np.array([[.8,.2,.2],[.2,.8,.2],[.2,.2,.8]])
     v = np.array([0.0, 50.0, 100.0])
     #v = np.array([0.0, 50.0])
@@ -461,6 +461,7 @@ if __name__ == '__main__':
         generate_traces_gill(w, T, batch_size, r_mat=R, v=v, noise_level=sigma, alpha=0.0, pi0=pi)
 
     t_init = time.time()
+
     A_list, v_list, noise_list, logL_list, iter, total_time\
         = cpEM_BW(fluo_states, A_init=A_init, v_init=np.array([15.0,45.0,90.0]), noise_init=sigma*1,
-                  pi0=pi, w=w, max_stack=max_stack, estimate_noise=1, max_iter=1000, eps=10e-6, verbose=0)
+                  pi0=pi, w=w, max_stack=max_stack, estimate_noise=1, max_iter=1000, eps=10e-6, verbose=1)

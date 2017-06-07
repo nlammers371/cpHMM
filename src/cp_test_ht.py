@@ -1,3 +1,4 @@
+from matplotlib import pyplot as plt
 import time
 import sys
 import scipy as sp # various algorithms
@@ -22,11 +23,11 @@ test_name = 'bw_test'
 #Specify whether to use truncated BW or Stack Decoder Viterbi
 model = 'bw'
 #Num Independent Runs for final inference step
-final_iters = 20
+final_iters = 5
 #Num Paths to Track for final inf (Stack Decoder Only)
 decoder_stack_size = 25
 #Depth of Alpha and Beta Matrices (Truncated Bw only)
-bw_stack_size = 9
+bw_stack_size = 20
 #Estimate Noise in Final Sim?
 est_sigma_final = 1
 #Set prior regarding switching time scale (in seconds)
@@ -46,7 +47,7 @@ num_states = 3
 #Time Resolution
 dT = 10.1
 #Number of Traces
-n_traces = 5
+n_traces = 20
 #Trace Length (in time steps)
 trace_length = 200
 #set level of system noise (relative to w*v[1])
@@ -115,9 +116,9 @@ class Eve2ExpRealistic(object):
         self.sigma = snr * self.v[1] *self.w
         # Initial stat pdf
         if num_states == 3:
-            self.pi = [.33,.33,.34]
+            self.pi = [.8,.1,.1]
         elif num_states == 2:
-            self.pi = [.5, .5]
+            self.pi = [.8, .2]
 
         self.K = num_states
 
@@ -158,9 +159,9 @@ class Eve2ExpShort(object):
         self.sigma = snr * self.v[1] *self.w
         # Initial stat pdf
         if num_states == 3:
-            self.pi = [.33,.33,.34]
+            self.pi = [.8,.1,.1]
         elif num_states == 2:
-            self.pi = [.5, .5]
+            self.pi = [.8, .2]
 
         self.K = num_states
 
@@ -193,9 +194,9 @@ class GenericExp(object):
         # noise
         self.sigma = snr * self.v[1] * self.w  # Initial stat pdf
         if num_states == 3:
-            self.pi = [.33, .33, .34]
+            self.pi = [.8, .1, .1]
         elif num_states == 2:
-            self.pi = [.5,.5]
+            self.pi = [.8,.2]
 #-----------------------------------------------Write Paths------------------------------------------------------------#
 if exp_type == 'eve2':
     expClass = Eve2ExpRealistic()
@@ -233,13 +234,16 @@ def runit_viterbi(init_set, fluo,pi,est_noise):
     return np.exp(A_list[-1]), v_list[-1], sigma_list[-1], logL_list[-1], iters, run_time
 
 def runit_bw(init_set, fluo,pi,est_noise):
+
     A_init = init_set[0]
     v_init = init_set[1]
-    sigma_init = init_set[2]
+
+    sigma_init = init_set[2][0]
+
     A_list, v_list, logL_list, sigma_list, iters, run_time = cpEM_BW(  fluo=fluo,
                                                                        A_init=A_init,
                                                                        v_init=v_init,
-                                                                       noise_init=sigma_init[0],
+                                                                       noise_init=sigma_init,
                                                                        pi0=expClass.pi,
                                                                        w=expClass.w,
                                                                        estimate_noise=est_noise,
@@ -272,7 +276,7 @@ if __name__ == "__main__":
     # Write true param values
     with open(os.path.join(writepath, 'true_values.csv'), 'wb') as inf_out:
         writer = csv.writer(inf_out)
-        A_flat = np.reshape(sp.linalg.logm(expClass.R) / dT, expClass.K ** 2).tolist()
+        A_flat = np.reshape(sp.linalg.expm(expClass.R*dT) , expClass.K ** 2).tolist()
         R_flat = np.reshape(expClass.R / dT, expClass.K ** 2).tolist()
         row = list(chain(*[[1], A_flat, R_flat, expClass.v.tolist(), [expClass.sigma], expClass.pi]))
         writer.writerow(row)
@@ -326,7 +330,7 @@ if __name__ == "__main__":
     elif model == 'bw':
         inf_results = Parallel(n_jobs=RoutineParamsFinal.num_inf_cores)(
                                                     delayed(runit_bw)(init_set=p0, fluo=fluo_states, pi=expClass.pi,
-                                                    est_noise=1) for  p0 in init_list)
+                                                    est_noise=RoutineParamsFinal.estimate_noise) for p0 in init_list)
     print("Runtime: " + str(time.time() - init_time))
 
     # Find routine with highest likelihood score
@@ -343,7 +347,10 @@ if __name__ == "__main__":
     with open(os.path.join(writepath, 'best_results.csv'), 'wb') as inf_out:
         writer = csv.writer(inf_out)
         A_flat = np.reshape(best_results[0], expClass.K ** 2).tolist()
-        R_flat = np.reshape(sp.linalg.logm(best_results[0]) / dT, expClass.K ** 2).tolist()
+        try:
+            R_flat = np.reshape(sp.linalg.logm(best_results[0]) / dT, expClass.K ** 2).tolist()
+        except:
+            R_flat = np.zeros(expClass.K**2)
         v_best = best_results[1]
         row = list(chain(*[[max_id],A_flat, R_flat, v_best.tolist(), [best_results[2]], [best_results[3]], expClass.pi,
                       [best_results[4]], [best_results[5]]]))
@@ -355,7 +362,10 @@ if __name__ == "__main__":
             for n in xrange(RoutineParamsFinal.n_inf):
                 results = inf_results[n]
                 A_flat = np.reshape(results[0], expClass.K ** 2).tolist()
-                R_flat = np.reshape(sp.linalg.logm(results[0]) / dT, expClass.K ** 2).tolist()
+                try:
+                    R_flat = np.reshape(sp.linalg.logm(results[0]) / dT, expClass.K ** 2).tolist()
+                except:
+                    continue
                 row = list(chain(
                     *[[n], A_flat, R_flat, inf_results[n][1].tolist(), [inf_results[n][2]], [inf_results[n][3]], expClass.pi,
                       [inf_results[n][4]], [inf_results[n][5]]]))
