@@ -18,10 +18,10 @@ import csv
 ###Project Params
 project_folder = 'method_validation'
 project_subfolder = 'A_level_comparison'
-test_name = 'stack_test'
+test_name = 'bw_test'
 #---------------------------------------Routine Params---------------------------------------#
 #Specify whether to use truncated BW or Stack Decoder Viterbi
-model = 'viterbi'
+model = 'bw'
 #Num Independent Runs for final inference step
 final_iters = 250
 #Num Paths to Track for final inf (Stack Decoder Only)
@@ -57,7 +57,7 @@ exp_type = 'eve2short'
 #Routine Param Type
 rType = 'basic'
 #Set Core Num
-cores = 20 #multiprocessing.cpu_count()
+cores = 10 #multiprocessing.cpu_count()
 class RPFinalBase(object):
     def __init__(self):
         self.model = model
