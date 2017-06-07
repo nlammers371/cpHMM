@@ -221,8 +221,6 @@ def cpEM_viterbi_full(fluo, A_init, v_init, noise_init, pi0, n_groups=1, estimat
         #-------------------------------------Update Noise Estimate----------------------------------------------------$
         v_list.append(v_new)
         A_list.append(np.log(A_new))
-        print(A_new)
-        print(v_new)
         if estimate_noise:
             noise_list.append(sigma_new)
         else:

@@ -15,15 +15,15 @@ import csv
 #------------------------------------------------Top Level Exp Specifications------------------------------------------#
 ###Project Params
 project_folder = 'method_validation'
-project_subfolder = 'A_level_comparison'
+project_subfolder = 'ZZ_test_run'
 test_name = 'stack_test'
 #---------------------------------------Routine Params---------------------------------------#
 #Specify whether to use truncated BW or Stack Decoder Viterbi
 model = 'viterbi'
 #Num Independent Runs for final inference step
-final_iters = 250
+final_iters = 2
 #Num Paths to Track for final inf (Stack Decoder Only)
-decoder_stack_size = 250
+decoder_stack_size = 25
 #Depth of Alpha and Beta Matrices (Truncated Bw only)
 bw_stack_size = 9
 #Estimate Noise in Final Sim?
@@ -45,9 +45,9 @@ num_states = 3
 #Time Resolution
 dT = 10.1
 #Number of Traces
-n_traces = 50
+n_traces = 5
 #Trace Length (in time steps)
-trace_length = 200
+trace_length = 20
 #set level of system noise (relative to w*v[1])
 snr = .05
 #Type of rate matrix
@@ -226,7 +226,7 @@ def runit_viterbi(init_set, fluo,pi,est_noise):
                                                                                alpha=expClass.alpha,
                                                                                max_stack=RoutineParamsFinal.max_decoder_stack,
                                                                                max_iter=RoutineParamsFinal.max_iter,
-                                                                               eps=10e-4)
+                                                                               eps=10e-6)
 
     return np.exp(A_list[-1]), v_list[-1], sigma_list[-1], logL_list[-1], iters, run_time
 
@@ -242,7 +242,7 @@ def runit_bw(init_set, fluo,pi,est_noise):
                                                                        w=expClass.w,
                                                                        max_stack=RoutineParamsFinal.max_bw_stack,
                                                                        max_iter=RoutineParamsFinal.max_iter,
-                                                                       eps=10e-4)
+                                                                       eps=10e-6)
 
     return np.exp(A_list[-1]), v_list[-1], sigma_list[-1], logL_list[-1], iters, run_time
 
@@ -268,8 +268,9 @@ if __name__ == "__main__":
     # Write true param values
     with open(os.path.join(writepath, 'true_values.csv'), 'wb') as inf_out:
         writer = csv.writer(inf_out)
+        A_flat = np.reshape(sp.linalg.logm(expClass.R) / dT, expClass.K ** 2).tolist()
         R_flat = np.reshape(expClass.R / dT, expClass.K ** 2).tolist()
-        row = list(chain(*[R_flat, expClass.v.tolist(), [expClass.sigma], expClass.pi]))
+        row = list(chain(*[[1], A_flat, R_flat, expClass.v.tolist(), [expClass.sigma], expClass.pi]))
         writer.writerow(row)
 
     _, fluo_states, _, _ = \
@@ -335,9 +336,11 @@ if __name__ == "__main__":
     # Write best param estimates to csv
     with open(os.path.join(writepath, 'best_results.csv'), 'wb') as inf_out:
         writer = csv.writer(inf_out)
-        tr_flat = np.reshape(sp.linalg.logm(best_results[0]) / dT, expClass.K ** 2).tolist()
+        A_flat = np.reshape(best_results[0], expClass.K ** 2).tolist()
+        R_flat = np.reshape(sp.linalg.logm(best_results[0]) / dT, expClass.K ** 2).tolist()
         v_best = best_results[1]
-        row = list(chain(*[tr_flat, v_best.tolist(), [best_results[2]], [best_results[3]], expClass.pi]))
+        row = list(chain(*[[max_id],A_flat, R_flat, v_best.tolist(), [best_results[2]], [best_results[3]], expClass.pi,
+                      [best_results[4]], [best_results[5]]]))
         writer.writerow(row)
 
         # write full inference results to csv
@@ -345,9 +348,10 @@ if __name__ == "__main__":
             writer = csv.writer(full_out)
             for n in xrange(RoutineParamsFinal.n_inf):
                 results = inf_results[n]
-                tr_flat = np.reshape(sp.linalg.logm(results[0]) / dT, expClass.K ** 2).tolist()
+                A_flat = np.reshape(results[0], expClass.K ** 2).tolist()
+                R_flat = np.reshape(sp.linalg.logm(results[0]) / dT, expClass.K ** 2).tolist()
                 row = list(chain(
-                    *[tr_flat, inf_results[n][1].tolist(), [inf_results[n][2]], [inf_results[n][3]], expClass.pi,
+                    *[[n], A_flat, R_flat, inf_results[n][1].tolist(), [inf_results[n][2]], [inf_results[n][3]], expClass.pi,
                       [inf_results[n][4]], [inf_results[n][5]]]))
                 writer.writerow(row)
 
@@ -357,7 +361,7 @@ if __name__ == "__main__":
                 results = init_list[n]
                 A_flat = np.reshape(results[0], expClass.K ** 2).tolist()
                 R_flat = np.reshape(results[-1], expClass.K ** 2).tolist()
-                row = list(chain(*[R_flat, inf_results[n][1].tolist(), [inf_results[n][2]], expClass.pi]))
+                row = list(chain(*[[n], A_flat, R_flat, inf_results[n][1].tolist(), [inf_results[n][2]], expClass.pi]))
                 writer.writerow(row)
 
     # Save Simulation Variables to File
