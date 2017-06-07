@@ -46,7 +46,6 @@ def alpha_alg_cp(fluo_vec, A_log, v, w, noise, pi0_log, max_stack):
             #Pad wit zeros to easy maximization computations. Will be given p weight of zero, so value irrelevant
             cf += [0]*(max_stack-len(cf))
             cf_list.append(cf)
-
             alpha_array[:K,0] = pi0_log + np.array([log_L_fluo(fluo_vec[t], v[s], noise) for s in xrange(K)])
             Stack = [[s] + [0]*(w-1)  for s in xrange(K)]
             # [s_{t}, s_{t-1}, s_{t-2},...s_{t-w+1}
@@ -310,10 +309,8 @@ def cpEM_BW(fluo, A_init, v_init, noise_init, pi0, w, estimate_noise=1, max_stac
         loop_start_time = time.time()
         v_curr = v_list[iter-1]
         A_log= A_list[iter-1]
-        if estimate_noise:
-            noise = sigma_list[-1]
-        else:
-            noise = noise_init
+        noise = sigma_list[-1]
+
         #--------------------------Fwd Bkwd Algorithm for Each Sequence----------------------------------------------------#
         #store likelihood of each sequence given current parameter estimates
         seq_log_probs = []
@@ -433,7 +430,8 @@ def cpEM_BW(fluo, A_init, v_init, noise_init, pi0, w, estimate_noise=1, max_stac
                 print(abs(delta))
                 print(v_new)
                 print(A_new)
-                print(sigma_new)
+                if estimate_noise:
+                    print(sigma_new)
                 print(loop_time)
 
         iter += 1
@@ -465,4 +463,4 @@ if __name__ == '__main__':
     t_init = time.time()
     A_list, v_list, noise_list, logL_list, iter, total_time\
         = cpEM_BW(fluo_states, A_init=A_init, v_init=np.array([15.0,45.0,90.0]), noise_init=sigma*1,
-                  pi0=pi, w=w, max_stack=max_stack, estimate_noise=1, max_iter=1000, eps=10e-6, verbose=1)
+                  pi0=pi, w=w, max_stack=max_stack, estimate_noise=1, max_iter=1000, eps=10e-6, verbose=0)

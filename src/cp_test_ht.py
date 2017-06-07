@@ -16,10 +16,10 @@ import csv
 ###Project Params
 project_folder = 'method_validation'
 project_subfolder = 'ZZ_test_run'
-test_name = 'stack_test'
+test_name = 'bw_test'
 #---------------------------------------Routine Params---------------------------------------#
 #Specify whether to use truncated BW or Stack Decoder Viterbi
-model = 'viterbi'
+model = 'bw'
 #Num Independent Runs for final inference step
 final_iters = 2
 #Num Paths to Track for final inf (Stack Decoder Only)
@@ -238,8 +238,9 @@ def runit_bw(init_set, fluo,pi,est_noise):
                                                                        A_init=A_init,
                                                                        v_init=v_init,
                                                                        noise_init=sigma_init,
-                                                                       pi0=pi,
+                                                                       pi0=expClass.pi,
                                                                        w=expClass.w,
+                                                                       estimate_noise=est_noise,
                                                                        max_stack=RoutineParamsFinal.max_bw_stack,
                                                                        max_iter=RoutineParamsFinal.max_iter,
                                                                        eps=10e-6)
@@ -322,7 +323,7 @@ if __name__ == "__main__":
     elif model == 'bw':
         inf_results = Parallel(n_jobs=RoutineParamsFinal.num_inf_cores)(
                                                     delayed(runit_bw)(init_set=p0, fluo=fluo_states, pi=expClass.pi,
-                                                    est_noise=0) for  p0 in init_list)
+                                                    est_noise=1) for  p0 in init_list)
     print("Runtime: " + str(time.time() - init_time))
 
     # Find routine with highest likelihood score
