@@ -276,7 +276,7 @@ if __name__ == "__main__":
     # Write true param values
     with open(os.path.join(writepath, 'true_values.csv'), 'wb') as inf_out:
         writer = csv.writer(inf_out)
-        A_flat = np.reshape(sp.linalg.expm(expClass.R*dT) , expClass.K ** 2).tolist()
+        A_flat = np.reshape(sp.linalg.expm(expClass.R), expClass.K ** 2).tolist()
         R_flat = np.reshape(expClass.R / dT, expClass.K ** 2).tolist()
         row = list(chain(*[[0], A_flat, R_flat, expClass.v.tolist(), [expClass.sigma], expClass.pi]))
         writer.writerow(row)
@@ -334,7 +334,6 @@ if __name__ == "__main__":
     print("Runtime: " + str(time.time() - init_time))
 
     # Find routine with highest likelihood score
-    print(inf_results)
     logL_list = np.array([inf_results[i][3] for i in xrange(RoutineParamsFinal.n_inf)])
     logL_list = [value for value in logL_list if not math.isnan(value)]
     print(logL_list)
