@@ -177,111 +177,9 @@ def log_likelihood(fluo, A_log, v, noise, pi0_log, alpha, beta):
 
     return l_score
 
-def viterbi_cp_init(K, w):
-    """
-
-    :param K: n states
-    :param w: mem size
-    :return:
-    """
-    # Allocate Array containing all possible histories
-    cp_array = np.array(list(itertools.product(range(K), repeat=w)))
-    cp_array.astype('int')
-    # Create Array to store permitted transition info
-    to_from = np.zeros((K ** w, K), dtype='int')
-    for l in xrange(K ** w):
-        col = 0
-        for k in xrange(K ** w):
-            if np.all(cp_array[k, :][0:-1] == cp_array[l, :][1:]):
-                to_from[l, col] = k
-                col += 1
-
-    # Generate Array to store permitted init states
-    if w > 1:
-        cp_init = np.where(np.max(cp_array[:, 1:], axis=1) == 0)[0]
-    else:
-        cp_init = np.arange(K)
-
-    return(cp_array, to_from, cp_init)
-
-def viterbi_compound(fluo, A_log, v, noise, pi0_log, w, cp_array, to_from, cp_init):
-    """
-
-    :param fluo: list of fluorescence time series
-    :param A_log: Log of transition matrix
-    :param v: State emission vector
-    :param noise: system noise
-    :param pi0_log: log of initation PDF
-    :param w: memory in time steps
-    :return: most likely series of promoter states and compound emissions for each fluo vector
-    """
-    #Get state count
-    K = len(v)
-
-    # Calculate fluo values for each state
-    cp_e_vec = np.zeros(K ** w)
-    for s in xrange(K ** w):
-        cp_e_vec[s] = np.sum(np.array([v[cp_array[s, i]] for i in xrange(w)]))
-
-    #Initialize list to store fits
-    cp_state_fits = []
-    cp_fluo_fits = []
-    state_fits = []
-    fluo_fits = []
-    logL_list = []
-    for f, fluo_vec in enumerate(fluo):
-        T = len(fluo_vec)
-        #Intilize array to store state likelihoods for each step
-        v_array = np.zeros((K**w,T)) - np.Inf
-        #Initialize array to store pointers
-        p_array = np.zeros((K**w,T-1), dtype='int')
-        for t in xrange(T):
-            if t == 0:
-                for l in cp_init:
-                    v_array[l,t] = log_L_fluo(fluo=fluo_vec[t], fluo_est=cp_e_vec[l], noise=noise) + pi0_log[cp_array[l,0]]
-            else:
-                for l in xrange(K**w):
-                    #Convenience lookup vector to simplify indexing
-                    lk = to_from[l,:]
-                    #most recent state in current cp state
-                    rc = cp_array[l,0]
-                    lookback =  [v_array[k,t-1] + A_log[rc,cp_array[k,0]] for k in lk]
-                    e_prob = log_L_fluo(fluo=fluo_vec[t], fluo_est=cp_e_vec[l], noise=noise)
-                    #Get probs for present time point
-                    v_array[l,t] = np.max(e_prob + lookback)
-                    #Get pointer to most likely previous state
-                    p_array[l,t-1] = lk[np.argmax(np.array(lookback))]
-
-        #Backtrack to find optimal path
-        #Arrays to store compound sequences
-        cp_v_fits = np.zeros(T, dtype='int')
-        cp_f_fits = np.zeros(T)
-        #Arrays to store simple sequences
-        v_fits = np.zeros(T, dtype='int')
-        f_fits = np.zeros(T)
-
-        cp_v_fits[T-1] = np.argmax(v_array[:,T-1])
-        cp_f_fits[T-1] = cp_e_vec[cp_v_fits[T-1]]
-        v_fits[T-1] = cp_array[cp_v_fits[T-1],0]
-        f_fits[T-1] = v[v_fits[T-1]]
-        prev = cp_v_fits[T-1]
-
-        for t in xrange(T-1):
-            cp_v_fits[T-2-t] = p_array[prev,T-2-t]
-            cp_f_fits[T-2-t] = cp_e_vec[cp_v_fits[T-2-t]]
-            v_fits[T-2-t] = cp_array[cp_v_fits[T-2-t],0]
-            f_fits[T-2-t] = v[v_fits[T-2-t]]
-            prev = cp_v_fits[T-2-t]
-
-        cp_state_fits.append(cp_v_fits)
-        cp_fluo_fits.append(cp_f_fits)
-        state_fits.append(v_fits)
-        fluo_fits.append(f_fits)
-        logL_list.append(np.max(v_array[:,T-1]))
-    return (cp_state_fits, cp_fluo_fits, state_fits, fluo_fits, logL_list)
 
 #Approximate compound BW for inferring HMM parameteris in high-memory systems
-def cpEM_BW(fluo, A_init, v_init, noise_init, pi0, w, estimate_noise=1, max_stack=100, max_iter=1000, eps=10e-4, verbose=0):
+def cpEM_BW(fluo, A_init, v_init, noise_init, pi0, w, estimate_noise=1, keep_probs=0, max_stack=100, max_iter=1000, eps=10e-4, verbose=0):
     """
     :param fluo: time series of fluorescent intensities (list of lists)
     :param A_init: Initial guess at the system's transition probability matrix (KxK)
@@ -322,6 +220,8 @@ def cpEM_BW(fluo, A_init, v_init, noise_init, pi0, w, estimate_noise=1, max_stac
         state_list = []
         cp_fluo_list = []
         cp_state_list = []
+
+        full_seq_probs = []
         for f, fluo_vec in enumerate(fluo):
             alpha_array, s_list, p_list, cf_list, Stack, F_list = alpha_alg_cp(fluo_vec=fluo_vec,
                                                                        A_log=A_log,
@@ -352,6 +252,8 @@ def cpEM_BW(fluo, A_init, v_init, noise_init, pi0, w, estimate_noise=1, max_stac
             state_list.append(s_list)
             cp_fluo_list.append(cf_list)
             cp_state_list.append(F_list)
+            if keep_probs:
+                full_seq_probs.append(alpha_array + beta_array - p_seq)
         #---------------------------------------Calculate Updated A and v--------------------------------------------------#
         #Update A
         #List of Lists to store transition events
@@ -436,7 +338,7 @@ def cpEM_BW(fluo, A_init, v_init, noise_init, pi0, w, estimate_noise=1, max_stac
 
         iter += 1
 
-    return(A_list, v_list, sigma_list, logL_list, iter, total_time)
+    return(A_list, v_list, sigma_list, logL_list, iter, total_time, full_seq_probs)
 
 if __name__ == '__main__':
     # memory
