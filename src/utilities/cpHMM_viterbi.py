@@ -163,7 +163,7 @@ def cpEM_viterbi_full(fluo, A_init, v_init, noise_init, pi0, n_groups=1, estimat
                 print("Warning: Attempting viterbi fits for high complexity data. Stack decoder recommended")
             _, _, seq_out, v_out, logL_out = viterbi_compound(fluo, A_log, v_curr, sigma, pi0_log, w=w, cp_array=cp_array, to_from=to_from, cp_init=cp_init, alpha=alpha)
         else:
-            seq_out, f_out, v_out, logL_out = decode_cp(fluo, A_log, pi0_log, v_curr, w, sigma, stack_depth=max_stack)
+            seq_out, f_out, v_out, logL_out, _ = decode_cp(fluo, A_log, pi0_log, v_curr, w, sigma, stack_depth=max_stack)
 
         # -------------------------------Update Transition Probability Estimates----------------------------------------
         A_new = np.zeros_like(A_log) + min_val
