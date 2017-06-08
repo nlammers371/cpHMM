@@ -19,11 +19,11 @@ import csv
 project_folder = 'method_validation'
 #project_subfolder = 'A_level_comparison'
 #project_subfolder = 'ZZ_test_run'
-project_subfolder = 'E_mHMM_limit_corners_small'
-test_name = 'stack_test'
+project_subfolder = 'B_mHMM_limit_corners_small'
+test_name = 'bw_test'
 #---------------------------------------Routine Params---------------------------------------#
 #Specify whether to use truncated BW or Stack Decoder Viterbi
-model = 'viterbi'
+model = 'bw'
 #Set num independent routines
 n_routines = 10
 #Num Independent Runs for final inference step
@@ -31,7 +31,7 @@ final_iters = 100
 #Num Paths to Track for final inf (Stack Decoder Only)
 decoder_stack_size = 200
 #Depth of Alpha and Beta Matrices (Truncated Bw only)
-bw_stack_size = 50
+bw_stack_size = 100
 #Estimate Noise in Final Sim?
 est_sigma_final = 1
 #Set prior regarding switching time scale (in seconds)
@@ -65,7 +65,7 @@ exp_type = 'eve2real'
 #Routine Param Type
 rType = 'basic'
 #Set Core Num
-cores = 20 #multiprocessing.cpu_count()
+cores = 10 #multiprocessing.cpu_count()
 #---------------------------------------------Define rate Matrix Variants----------------------------------------------#
 
 R_equal_corners = np.array([[-.008, .015 * corr, .015],
