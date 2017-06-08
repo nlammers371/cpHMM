@@ -1,0 +1,1 @@
+('max_decoder_stack', 200)('n_routines', 10)('n_inf', 100)('R_temp', 1)('max_iter', 150)('v_temp', 1)('eps', 0.0001)('max_bw_stack', 50)('keep_probs', 0)('estimate_noise', 1)('sigma_temp', 1)('num_inf_cores', 20)('model', 'viterbi')
