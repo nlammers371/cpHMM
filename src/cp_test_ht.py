@@ -19,7 +19,7 @@ import csv
 project_folder = 'method_validation'
 #project_subfolder = 'A_level_comparison'
 #project_subfolder = 'ZZ_test_run'
-project_subfolder = 'B_mHMM_limit_slow'
+project_subfolder = 'E_mHMM_limit_corners_small'
 test_name = 'stack_test'
 #---------------------------------------Routine Params---------------------------------------#
 #Specify whether to use truncated BW or Stack Decoder Viterbi
@@ -29,7 +29,7 @@ n_routines = 10
 #Num Independent Runs for final inference step
 final_iters = 100
 #Num Paths to Track for final inf (Stack Decoder Only)
-decoder_stack_size = 100
+decoder_stack_size = 200
 #Depth of Alpha and Beta Matrices (Truncated Bw only)
 bw_stack_size = 50
 #Estimate Noise in Final Sim?
@@ -51,7 +51,7 @@ corr = 1
 #num activity states
 num_states = 3
 #Transition matrix type
-r_type = "R_slow"
+r_type = "R_small_corners"
 #Time Resolution
 dT = 10.0
 #Number of Traces
