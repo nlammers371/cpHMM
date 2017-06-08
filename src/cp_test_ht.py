@@ -18,20 +18,23 @@ import csv
 ###Project Params
 project_folder = 'method_validation'
 project_subfolder = 'A_level_comparison'
-test_name = 'bw_test'
+#project_subfolder = 'ZZ_test_run'
+test_name = 'bw_test_w_probs'
 #---------------------------------------Routine Params---------------------------------------#
 #Specify whether to use truncated BW or Stack Decoder Viterbi
 model = 'bw'
 #Num Independent Runs for final inference step
-final_iters = 250
+final_iters = 1
 #Num Paths to Track for final inf (Stack Decoder Only)
 decoder_stack_size = 100
 #Depth of Alpha and Beta Matrices (Truncated Bw only)
-bw_stack_size = 9
+bw_stack_size = 3
 #Estimate Noise in Final Sim?
 est_sigma_final = 1
 #Set prior regarding switching time scale (in seconds)
 switch_scale = 60
+#Store BW probs
+keep_probs = 1
 #Set temp params that dictate degree of flexibility allowed for initialization
 R_temp = 1
 v_temp = 1
@@ -51,16 +54,20 @@ n_traces = 50
 #Trace Length (in time steps)
 trace_length = 200
 #set level of system noise (relative to w*v[1])
-snr = .05
+snr = .1
 #Type of rate matrix
 exp_type = 'eve2short'
 #Routine Param Type
 rType = 'basic'
 #Set Core Num
-cores = 10 #multiprocessing.cpu_count()
+cores = 1 #multiprocessing.cpu_count()
 class RPFinalBase(object):
     def __init__(self):
+        # Kind of model used
         self.model = model
+        # Keep Alpha-Beta Probs (only relevant for BW)
+        self.keep_probs = keep_probs
+        # Convergence Criteria
         self.eps = 10e-5
         # Max number of iterations permitted
         self.max_iter = 1000
@@ -80,48 +87,6 @@ class RPFinalBase(object):
         self.sigma_temp = sigma_temp
 
 #-------------------------------------"True" Variable Definitions------------------------------------------------------#
-class Eve2ExpRealistic(object):
-    def __init__(self):
-        #Degree of correlation btw two promoters (only relevant for 3+ state case)
-        self.promoter_correlation = corr
-        #Temporal Resolution of Experiment
-        self.dt = dT
-        #elongation time
-        self.t_elong = 160
-        # memory
-        self.w = int(np.round(self.t_elong / dT))
-        # alpha
-        self.alpha = alpha_frac * self.w
-        # Fix trace length for now
-        self.T = trace_length
-        # Number of traces per batch
-        self.batch_size = n_traces
-        # Set transition rate matrix for system
-        if num_states == 3:
-            self.R = np.array([[-.008, .009*corr, 0.0],
-                               [.008, -.014*corr, .04],
-                               [0.0,   .005*corr, -.04]]) * self.dt
-
-        elif num_states == 2:
-            self.R = np.array([[-.004, .014],
-                               [.004, -.014]]) * self.dt
-        # Set emission levels
-        if num_states == 3:
-            self.v = np.array([0.0, 25.0, 50.0])
-        elif num_states == 2:
-            self.v = np.array([0.0, 25.0])
-        #snr
-        self.snr = snr
-        # noise
-        self.sigma = snr * self.v[1] *self.w
-        # Initial stat pdf
-        if num_states == 3:
-            self.pi = [.8,.1,.1]
-        elif num_states == 2:
-            self.pi = [.8, .2]
-
-        self.K = num_states
-
 #Class with assuming low mem but otherwise realistic param values
 class Eve2ExpShort(object):
     def __init__(self):
@@ -146,8 +111,92 @@ class Eve2ExpShort(object):
                                [0.0, .004*corr, -.03]]) * self.dt
 
         elif num_states == 2:
-            self.R = np.array([[-.004, .014],
-                               [.004, -.014]]) * self.dt
+            self.R = np.array([[-.004, .019],
+                               [.004, -.019]]) * self.dt
+        # Set emission levels
+        if num_states == 3:
+            self.v = np.array([0.0, 25.0, 50.0])
+        elif num_states == 2:
+            self.v = np.array([0.0, 25.0])
+        #snr
+        self.snr = snr
+        # noise
+        self.sigma = snr * self.v[1] *self.w
+        # Initial stat pdf
+        if num_states == 3:
+            self.pi = [.8,.1,.1]
+        elif num_states == 2:
+            self.pi = [.8, .2]
+
+        self.K = num_states
+
+class Eve2ExpRealistic(object):
+    def __init__(self):
+        #Degree of correlation btw two promoters (only relevant for 3+ state case)
+        self.promoter_correlation = corr
+        #Temporal Resolution of Experiment
+        self.dt = dT
+        #elongation time
+        self.t_elong = 160
+        # memory
+        self.w = int(np.round(self.t_elong / dT))
+        # alpha
+        self.alpha = alpha_frac * self.w
+        # Fix trace length for now
+        self.T = trace_length
+        # Number of traces per batch
+        self.batch_size = n_traces
+        # Set transition rate matrix for system
+        if num_states == 3:
+            self.R = np.array([[-.008, .015 * corr, 0.0],
+                               [.008, -.019 * corr, .03],
+                               [0.0, .004 * corr, -.03]]) * self.dt
+
+        elif num_states == 2:
+            self.R = np.array([[-.004, .019],
+                               [.004, -.019]]) * self.dt
+        # Set emission levels
+        if num_states == 3:
+            self.v = np.array([0.0, 25.0, 50.0])
+        elif num_states == 2:
+            self.v = np.array([0.0, 25.0])
+        #snr
+        self.snr = snr
+        # noise
+        self.sigma = snr * self.v[1] *self.w
+        # Initial stat pdf
+        if num_states == 3:
+            self.pi = [.8,.1,.1]
+        elif num_states == 2:
+            self.pi = [.8, .2]
+
+        self.K = num_states
+
+class Eve2ExpFast(object):
+    def __init__(self):
+        #Degree of correlation btw two promoters (only relevant for 3+ state case)
+        self.promoter_correlation = corr
+        #Temporal Resolution of Experiment
+        self.dt = dT
+        #elongation time
+        self.t_elong = 160
+        # memory
+        self.w = int(np.round(self.t_elong / dT))
+        # alpha
+        self.alpha = alpha_frac * self.w
+        # Fix trace length for now
+        self.T = trace_length
+        # Number of traces per batch
+        self.batch_size = n_traces
+        # Set transition rate matrix for system
+        if num_states == 3:
+            self.R = np.array([[-.008, .015 * corr, 0.0],
+                               [.008, -.019 * corr, .03],
+                               [0.0, .004 * corr, -.03]]) * self.dt * 1.5
+
+        elif num_states == 2:
+            self.R = np.array([[-.004, .019],
+                               [.004, -.019]]) * self.dt
         # Set emission levels
         if num_states == 3:
             self.v = np.array([0.0, 25.0, 50.0])
@@ -166,6 +215,48 @@ class Eve2ExpShort(object):
         self.K = num_states
 
 
+class Eve2ExpFast(object):
+    def __init__(self):
+        #Degree of correlation btw two promoters (only relevant for 3+ state case)
+        self.promoter_correlation = corr
+        #Temporal Resolution of Experiment
+        self.dt = dT
+        #elongation time
+        self.t_elong = 160
+        # memory
+        self.w = int(np.round(self.t_elong / dT))
+        # alpha
+        self.alpha = alpha_frac * self.w
+        # Fix trace length for now
+        self.T = trace_length
+        # Number of traces per batch
+        self.batch_size = n_traces
+        # Set transition rate matrix for system
+        if num_states == 3:
+            self.R = np.array([[-.008, .015 * corr, 0.0],
+                               [.008, -.019 * corr, .03],
+                               [0.0, .004 * corr, -.03]]) * self.dt * 1.5
+
+        elif num_states == 2:
+            self.R = np.array([[-.004, .019],
+                               [.004, -.019]]) * self.dt
+        # Set emission levels
+        if num_states == 3:
+            self.v = np.array([0.0, 25.0, 50.0])
+        elif num_states == 2:
+            self.v = np.array([0.0, 25.0])
+        #snr
+        self.snr = snr
+        # noise
+        self.sigma = snr * self.v[1] *self.w
+        # Initial stat pdf
+        if num_states == 3:
+            self.pi = [.8,.1,.1]
+        elif num_states == 2:
+            self.pi = [.8, .2]
+
+        self.K = num_states
+
 class GenericExp(object):
     def __init__(self):
         # Temporal Resolution of Experiment
@@ -181,7 +272,9 @@ class GenericExp(object):
         # Number of traces per batch
         self.batch_size = n_traces# Set transition rate matrix for system
         if num_states == 3:
-            self.R = np.array([[-.014, .007, .007], [.007, -.014, .007], [.007, .007, -.014]]) * self.dt
+            self.R = np.array([[-.014, .007, .007],
+                               [.007, -.014, .007],
+                               [.007, .007, -.014]]) * self.dt
         elif num_states == 2:
             self.R = np.array([[-.014, .014], [.014, -.014]]) * self.dt
         # Set emission levels
@@ -197,6 +290,7 @@ class GenericExp(object):
             self.pi = [.8, .1, .1]
         elif num_states == 2:
             self.pi = [.8,.2]
+        self.K = num_states
 #-----------------------------------------------Write Paths------------------------------------------------------------#
 if exp_type == 'eve2':
     expClass = Eve2ExpRealistic()
@@ -231,7 +325,7 @@ def runit_viterbi(init_set, fluo,pi,est_noise):
                                                                                max_iter=RoutineParamsFinal.max_iter,
                                                                                eps=RoutineParamsFinal.eps)
 
-    return (np.exp(A_list[-1]), v_list[-1], sigma_list[-1], logL_list[-1], iters, run_time)
+    return (np.exp(A_list[-1]), v_list[-1], sigma_list[-1], logL_list[-1], iters, run_time, logL_list[-1]-logL_list[1])
 
 def runit_bw(init_set, fluo,pi,est_noise):
 
@@ -240,7 +334,7 @@ def runit_bw(init_set, fluo,pi,est_noise):
 
     sigma_init = init_set[2][0]
 
-    A_list, v_list, sigma_list, logL_list, iters, run_time = cpEM_BW(  fluo=fluo,
+    A_list, v_list, sigma_list, logL_list, iters, run_time, s_array = cpEM_BW(  fluo=fluo,
                                                                        A_init=A_init,
                                                                        v_init=v_init,
                                                                        noise_init=sigma_init,
@@ -249,10 +343,11 @@ def runit_bw(init_set, fluo,pi,est_noise):
                                                                        estimate_noise=est_noise,
                                                                        max_stack=RoutineParamsFinal.max_bw_stack,
                                                                        max_iter=RoutineParamsFinal.max_iter,
+                                                                       keep_probs=RoutineParamsFinal.keep_probs,
                                                                        eps=RoutineParamsFinal.eps,
                                                                        verbose=0)
 
-    return (np.exp(A_list[-1]), v_list[-1], sigma_list[-1], logL_list[-1], iters, run_time)
+    return (np.exp(A_list[-1]), v_list[-1], sigma_list[-1], logL_list[-1], iters, run_time, logL_list[-1]-logL_list[1], s_array)
 
 #Convenience function for truncated random normal pdf
 def t_norm(lower, upper, mu, sigma, N):
@@ -276,7 +371,7 @@ if __name__ == "__main__":
     # Write true param values
     with open(os.path.join(writepath, 'true_values.csv'), 'wb') as inf_out:
         writer = csv.writer(inf_out)
-        A_flat = np.reshape(sp.linalg.expm(expClass.R*dT) , expClass.K ** 2).tolist()
+        A_flat = np.reshape(sp.linalg.expm(expClass.R) , expClass.K ** 2).tolist()
         R_flat = np.reshape(expClass.R / dT, expClass.K ** 2).tolist()
         row = list(chain(*[[0], A_flat, R_flat, expClass.v.tolist(), [expClass.sigma], expClass.pi]))
         writer.writerow(row)
@@ -334,15 +429,13 @@ if __name__ == "__main__":
     print("Runtime: " + str(time.time() - init_time))
 
     # Find routine with highest likelihood score
-    print(inf_results)
     logL_list = np.array([inf_results[i][3] for i in xrange(RoutineParamsFinal.n_inf)])
     logL_list = [value for value in logL_list if not math.isnan(value)]
-    print(logL_list)
     max_id = np.argmax(logL_list)
     best_results = inf_results[max_id]
     print("Optimal Params: ")
     print("")
-    print(best_results)
+    print(best_results[:-1])
     # Write best param estimates to csv
     with open(os.path.join(writepath, 'best_results.csv'), 'wb') as inf_out:
         writer = csv.writer(inf_out)
@@ -353,32 +446,41 @@ if __name__ == "__main__":
             R_flat = np.zeros(expClass.K**2)
         v_best = best_results[1]
         row = list(chain(*[[max_id],A_flat, R_flat, v_best.tolist(), [best_results[2]], [best_results[3]], expClass.pi,
-                      [best_results[4]], [best_results[5]]]))
+                      [best_results[4]], [best_results[5]], [best_results[6]]]))
         writer.writerow(row)
 
-        # write full inference results to csv
-        with open(os.path.join(writepath, 'full_results.csv'), 'wb') as full_out:
-            writer = csv.writer(full_out)
-            for n in xrange(RoutineParamsFinal.n_inf):
-                results = inf_results[n]
-                A_flat = np.reshape(results[0], expClass.K ** 2).tolist()
-                try:
-                    R_flat = np.reshape(sp.linalg.logm(results[0]) / dT, expClass.K ** 2).tolist()
-                except:
-                    continue
-                row = list(chain(
-                    *[[n], A_flat, R_flat, inf_results[n][1].tolist(), [inf_results[n][2]], [inf_results[n][3]], expClass.pi,
-                      [inf_results[n][4]], [inf_results[n][5]]]))
-                writer.writerow(row)
+    # write full inference results to csv
+    with open(os.path.join(writepath, 'full_results.csv'), 'wb') as full_out:
+        writer = csv.writer(full_out)
+        for n in xrange(RoutineParamsFinal.n_inf):
+            results = inf_results[n]
+            A_flat = np.reshape(results[0], expClass.K ** 2).tolist()
+            try:
+                R_flat = np.reshape(sp.linalg.logm(results[0]) / dT, expClass.K ** 2).tolist()
+            except:
+                continue
+            row = list(chain(
+                *[[n], A_flat, R_flat, inf_results[n][1].tolist(), [inf_results[n][2]], [inf_results[n][3]], expClass.pi,
+                  [inf_results[n][4]], [inf_results[n][5]], [inf_results[n][6]]]))
+            writer.writerow(row)
 
-        with open(os.path.join(writepath, 'initializations.csv'), 'wb') as init_out:
+    with open(os.path.join(writepath, 'initializations.csv'), 'wb') as init_out:
+        writer = csv.writer(init_out)
+        for n in xrange(RoutineParamsFinal.n_inf):
+            results = init_list[n]
+            A_flat = np.reshape(results[0], expClass.K ** 2).tolist()
+            R_flat = np.reshape(results[-1], expClass.K ** 2).tolist()
+            row = list(chain(*[[n], A_flat, R_flat, inf_results[n][1].tolist(), [inf_results[n][2]], expClass.pi]))
+            writer.writerow(row)
+    # If desired, print probability arrays from final step to csv
+    if RoutineParamsFinal.keep_probs:
+        s_array = best_results[7]
+        with open(os.path.join(writepath, 'probability_distibutions.csv'), 'wb') as init_out:
             writer = csv.writer(init_out)
-            for n in xrange(RoutineParamsFinal.n_inf):
-                results = init_list[n]
-                A_flat = np.reshape(results[0], expClass.K ** 2).tolist()
-                R_flat = np.reshape(results[-1], expClass.K ** 2).tolist()
-                row = list(chain(*[[n], A_flat, R_flat, inf_results[n][1].tolist(), [inf_results[n][2]], expClass.pi]))
-                writer.writerow(row)
+            for n in xrange(n_traces):
+                for r in xrange(len(s_array[n][:,0])):
+                    row = list(chain(*[[r],np.exp(s_array[n][r,:].tolist())]))
+                    writer.writerow(row)
 
     # Save Simulation Variables to File
     initVars = vars(RoutineParamsFinal)

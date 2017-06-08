@@ -8,7 +8,7 @@ import itertools
 from math import log
 from functions import log_L_fluo
 
-def decode_cp(fluo, A_log, pi0_log, v, w, noise, stack_depth, alpha=0):
+def decode_cp(fluo, A_log, pi0_log, v, w, noise, stack_depth, alpha=0, log_stack=0):
     """
 
     :param fluo: list of fluorescence vectors
@@ -38,6 +38,7 @@ def decode_cp(fluo, A_log, pi0_log, v, w, noise, stack_depth, alpha=0):
         alpha_vec = np.array([1.0]*w)
     kernel = np.ones(w)*alpha_vec
     kernel = kernel[::-1]
+    stack_register = []
     for f, fluo_vec in enumerate(fluo):
         Stack = []
         T = len(fluo_vec)
@@ -70,6 +71,8 @@ def decode_cp(fluo, A_log, pi0_log, v, w, noise, stack_depth, alpha=0):
             #Enforce max stack length
             while (len(Stack) > stack_depth):
                 Stack.pop(0)
+            if log_stack:
+                stack_register.append(Stack)
 
         logL_out.append(T*Stack[-1][0])
         seq_out.append(Stack[-1][1][w:])
@@ -78,4 +81,4 @@ def decode_cp(fluo, A_log, pi0_log, v, w, noise, stack_depth, alpha=0):
         f_cp = np.convolve(kernel[::-1], emissions, mode='full')
         f_cp = f_cp[w:-w+1]
         f_out.append(f_cp)
-    return(seq_out, f_out, v_out, logL_out)
+    return(seq_out, f_out, v_out, logL_out, stack_register)
