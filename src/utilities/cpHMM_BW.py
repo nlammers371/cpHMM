@@ -279,9 +279,13 @@ def cpEM_BW(fluo, A_init, v_init, noise_init, pi0, w, estimate_noise=1, keep_pro
                         event_id.append(K*to_state+from_state)
         event_list = np.array(event_list)
         event_id = np.array(event_id)
-        A_log_new = np.zeros((K,K))
+        A_log_new = np.zeros((K,K)) - np.Inf
         for k in xrange(K**2):
-            A_log_new[k / K, k%K] = logsumexp(event_list[np.where(event_id == k)[0]])
+            try:
+                A_log_new[k / K, k%K] = logsumexp(event_list[np.where(event_id == k)[0]])
+            except:
+                continue
+
         A_log_new = A_log_new - np.tile(logsumexp(A_log_new, axis=0),(K,1))
         A_new = np.exp(A_log_new)
 

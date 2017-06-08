@@ -27,6 +27,7 @@ def decode_cp(fluo, A_log, pi0_log, v, w, noise, stack_depth, alpha=0, log_stack
     f_out = []
     v_out = []
     logL_out = []
+    stack_lengths = []
     # Calculate convolution kernel to apply to fluorescence
     if alpha > 0:
         alpha_vec = [(float(i + 1) / alpha + (float(i) / alpha)) / 2.0 * (i < alpha) * ((i + 1) <= alpha)
@@ -38,7 +39,7 @@ def decode_cp(fluo, A_log, pi0_log, v, w, noise, stack_depth, alpha=0, log_stack
         alpha_vec = np.array([1.0]*w)
     kernel = np.ones(w)*alpha_vec
     kernel = kernel[::-1]
-    stack_register = []
+    iter = 0
     for f, fluo_vec in enumerate(fluo):
         Stack = []
         T = len(fluo_vec)
@@ -71,8 +72,10 @@ def decode_cp(fluo, A_log, pi0_log, v, w, noise, stack_depth, alpha=0, log_stack
             #Enforce max stack length
             while (len(Stack) > stack_depth):
                 Stack.pop(0)
-            if log_stack:
-                stack_register.append(Stack)
+
+            if iter % 10 == 0:
+                if log_stack:
+                    stack_register.append(Stack)
 
         logL_out.append(T*Stack[-1][0])
         seq_out.append(Stack[-1][1][w:])
@@ -81,4 +84,4 @@ def decode_cp(fluo, A_log, pi0_log, v, w, noise, stack_depth, alpha=0, log_stack
         f_cp = np.convolve(kernel[::-1], emissions, mode='full')
         f_cp = f_cp[w:-w+1]
         f_out.append(f_cp)
-    return(seq_out, f_out, v_out, logL_out, stack_register)
+    return(seq_out, f_out, v_out, logL_out, stack_lengths)

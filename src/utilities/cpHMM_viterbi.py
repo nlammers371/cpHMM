@@ -45,7 +45,7 @@ def cpEM_viterbi(fluo, A_init, v_init, noise, pi0, w=1, use_viterbi=1, max_stack
                 print("Warning: Attempting viterbi fits for high complexity data. Stack decoder recommended")
             _, _, seq_out, v_out, logL_out = viterbi_compound(fluo, A_log, v_curr, noise, pi0_log, w=w)
         else:
-            seq_out, f_out, v_out, logL_out = decode_cp(fluo, A_log, pi0_log, v_curr, w, noise, stack_depth=max_stack)
+            seq_out, f_out, v_out, logL_out ,_ = decode_cp(fluo, A_log, pi0_log, v_curr, w, noise, stack_depth=max_stack)
         # ---------------------------------------Calculate Updated A and v--------------------------------------------------#
 
         # Update A
@@ -163,7 +163,7 @@ def cpEM_viterbi_full(fluo, A_init, v_init, noise_init, pi0, n_groups=1, estimat
                 print("Warning: Attempting viterbi fits for high complexity data. Stack decoder recommended")
             _, _, seq_out, v_out, logL_out = viterbi_compound(fluo, A_log, v_curr, sigma, pi0_log, w=w, cp_array=cp_array, to_from=to_from, cp_init=cp_init, alpha=alpha)
         else:
-            seq_out, f_out, v_out, logL_out, _ = decode_cp(fluo, A_log, pi0_log, v_curr, w, sigma, stack_depth=max_stack)
+            seq_out, f_out, v_out, logL_out, _  = decode_cp(fluo, A_log, pi0_log, v_curr, w, sigma, stack_depth=max_stack)
 
         # -------------------------------Update Transition Probability Estimates----------------------------------------
         A_new = np.zeros_like(A_log) + min_val
@@ -267,6 +267,6 @@ if __name__ == '__main__':
         generate_traces_gill(w, T, batch_size, r_mat=R, v=v, noise_level=sigma, alpha=2.0, pi0=pi)
 
     t_init = time.time()
-    A_list, v_list, noise_list, logL_list, iter, total_time\
+    A_list, v_list, noise_list, logL_list, iter, total_time, _\
         = cpEM_viterbi_full(fluo_states, A_init=A, v_init=v, noise_init=sigma*1,use_viterbi=0,
                             pi0=pi, w=w, max_stack=max_stack, alpha=2.0, max_iter=1000, eps=10e-4)
