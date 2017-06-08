@@ -19,7 +19,7 @@ import csv
 project_folder = 'method_validation'
 #project_subfolder = 'A_level_comparison'
 #project_subfolder = 'ZZ_test_run'
-project_folder = 'B_mHMM_limit_slow'
+project_subfolder = 'B_mHMM_limit_slow'
 test_name = 'stack_test'
 #---------------------------------------Routine Params---------------------------------------#
 #Specify whether to use truncated BW or Stack Decoder Viterbi
@@ -65,7 +65,7 @@ exp_type = 'eve2real'
 #Routine Param Type
 rType = 'basic'
 #Set Core Num
-cores = multiprocessing.cpu_count()
+cores = 20 #multiprocessing.cpu_count()
 #---------------------------------------------Define rate Matrix Variants----------------------------------------------#
 
 R_equal_corners = np.array([[-.008, .015 * corr, .015],
@@ -95,6 +95,8 @@ R_2state_fast = np.array([[-.008, .019],
 
 class RPFinalBase(object):
     def __init__(self):
+        #num rutines
+        self.n_routines = n_routines
         # Kind of model used
         self.model = model
         # Keep Alpha-Beta Probs (only relevant for BW)
@@ -102,7 +104,7 @@ class RPFinalBase(object):
         # Convergence Criteria
         self.eps = 10e-5
         # Max number of iterations permitted
-        self.max_iter = 500
+        self.max_iter = 150
         # N Separate Inferences
         self.n_inf = final_iters
         # set num cores to use
@@ -354,14 +356,13 @@ if __name__ == "__main__":
         row = list(chain(*[[0], A_flat, R_flat, expClass.v.tolist(), [expClass.sigma], expClass.pi]))
         writer.writerow(row)
 
-    _, fluo_states, _, _ = \
-        generate_traces_gill(expClass.w, expClass.T, expClass.batch_size, r_mat=expClass.R, v=expClass.v,
-                             noise_level=expClass.sigma, alpha=expClass.alpha, pi0=expClass.pi)
-
-
     for routine in xrange(n_routines):
         # -------------------------------------Conduct First Pass Initialization Values----------------------------------------------#
         # First Calculate Prior for v's based upon statistics of experimental data
+        _, fluo_states, _, _ = \
+            generate_traces_gill(expClass.w, expClass.T, expClass.batch_size, r_mat=expClass.R, v=expClass.v,
+                                 noise_level=expClass.sigma, alpha=expClass.alpha, pi0=expClass.pi)
+
         nine_five_p = np.percentile(list(chain(*fluo_states)), 95)
         if expClass.K == 2:
             v_prior = np.array([0,nine_five_p / expClass.w])
