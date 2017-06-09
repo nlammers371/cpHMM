@@ -23,9 +23,9 @@ project_subfolder = 'A_base_case'
 test_name = 'stack_test'
 #---------------------------------------Routine Params---------------------------------------#
 #Specify whether to use truncated BW or Stack Decoder Viterbi
-model = 'bw'
+model = 'viterbi'
 #Set num independent routines
-n_routines = 10
+n_routines = 5
 #Num Independent Runs for final inference step
 final_iters = 100
 #Num Paths to Track for final inf (Stack Decoder Only)
