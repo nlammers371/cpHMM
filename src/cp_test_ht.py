@@ -17,13 +17,13 @@ import csv
 #------------------------------------------------Top Level Exp Specifications------------------------------------------#
 ###Project Params
 project_folder = 'method_validation'
-project_subfolder = 'A_base_case'
+project_subfolder = 'AA_base_case'
 #project_subfolder = 'ZZ_test_run'
 #project_subfolder = 'XX_mHMM_limit_corners_small_testing'
-test_name = 'stack_test'
+test_name = 'bw_test'
 #---------------------------------------Routine Params---------------------------------------#
 #Specify whether to use truncated BW or Stack Decoder Viterbi
-model = 'viterbi'
+model = 'bw'
 #Set num independent routines
 n_routines = 5
 #Num Independent Runs for final inference step
@@ -65,7 +65,7 @@ exp_type = 'eve2short'
 #Routine Param Type
 rType = 'basic'
 #Set Core Num
-cores = 20 #multiprocessing.cpu_count()
+cores = 5 #multiprocessing.cpu_count()
 #---------------------------------------------Define rate Matrix Variants----------------------------------------------#
 
 R_equal_corners = np.array([[-.008, .015 * corr, .015],
