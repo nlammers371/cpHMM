@@ -1,14 +1,12 @@
 import time
 import sys
 import scipy # various algorithms
-from matplotlib import pyplot as plt
 import numpy as np
 from scipy.misc import logsumexp
 import math
 from itertools import chain
 import itertools
-from functions import log_L_fluo, generate_traces_gill, fwd_algorithm, bkwd_algorithm
-from stack_decoder import decode_cp
+from functions import log_L_fluo, generate_traces_gill
 
 def alpha_alg_cp(fluo_vec, A_log, v, w, noise, pi0_log, max_stack):
     """
@@ -433,32 +431,3 @@ if __name__ == '__main__':
 
     t_init = time.time()
     A_list, v_list, logL_list = cpEM_BW(fluo_states, A_init=A, v_init=v, noise=sigma*8, pi0=pi, w=w, max_stack=max_stack, max_iter=1000, eps=10e-4)
-
-    """
-    alpha_array, s_list, p_list, cf_list, Stack, F= alpha_alg_cp(fluo_vec=fluo_states[0], A_log=np.log(A), v=v, w=w,
-                                                               noise=10, pi0_log=np.log(pi), max_stack=min(K**w,max_stack))
-    print(F)
-    sys.exit(1)
-    alpha_simp = fwd_algorithm(fluo_vec=fluo_states[0], A_log=np.log(A), v=v,noise=10,pi0_log=np.log(pi))
-    #print(time.time() - t_init)
-    #print(Stack)
-    #print(s_list[-6:])
-    #print(p_list[-6:])
-    #print(cf_list[-3:])
-
-    beta_array = beta_alg_cp(fluo_vec=fluo_states[0], A_log=np.log(A), v=v, w=w, noise=10, pi0_log=np.log(pi),
-                             pointers=p_list, alpha_states=s_list, cp_fluo=cf_list, alpha_stack=Stack)
-
-    beta_simp, stuff = bkwd_algorithm(fluo_vec=fluo_states[0], A_log=np.log(A), v=v,noise=10,pi0_log=np.log(pi))
-    joint = alpha_array + beta_array
-    adjustment_vector = 0 + logsumexp(joint,axis=0)
-    #print(logsumexp(alpha_array + beta_array, axis=0) - adjustment_vector)
-    print(logsumexp(alpha_array + beta_array, axis=0) - logsumexp(alpha_array[:,-1]))
-    #print(beta_array[:,-6:])
-    #print(beta_simp[:,-6:])
-    #print(beta_array)
-
-    plt.plot(np.array(promoter_states[0]))
-    #plt.plot(np.array(fluo_states_nn[0]))
-    #plt.show()
-    """

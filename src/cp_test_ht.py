@@ -17,7 +17,7 @@ import csv
 #------------------------------------------------Top Level Exp Specifications------------------------------------------#
 ###Project Params
 project_folder = 'method_validation'
-project_subfolder = 'A_base_case'
+project_subfolder = 'EE_corners_small_short'
 #project_subfolder = 'ZZ_test_run'
 #project_subfolder = 'XX_mHMM_limit_corners_small_testing'
 test_name = 'stack_test'
@@ -51,7 +51,7 @@ corr = 1
 #num activity states
 num_states = 3
 #Transition matrix type
-r_type = "R_slow"
+r_type = "R_small_corners"
 #Time Resolution
 dT = 10.0
 #Number of Traces
