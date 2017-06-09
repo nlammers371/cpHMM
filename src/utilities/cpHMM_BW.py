@@ -262,12 +262,11 @@ def cpEM_BW(fluo, A_init, v_init, noise_init, pi0, w, estimate_noise=1, keep_pro
         event_id = []
         for f, fluo_vec in enumerate(fluo):
             T = len(fluo_vec)
-            a = alpha_arrays[f]
-            b = beta_arrays[f]
+            a = np.exp(alpha_arrays[f] - seq_log_probs[f])
+            b = np.exp(beta_arrays[f] - seq_log_probs[f])
             p = pointer_list[f]
             s = state_list[f]
             i = cp_fluo_list[f]
-            sp = seq_log_probs[f]
             for t in xrange(0,T-1):
                 for row in xrange(len(p[t])):
                     for r in p[t][row]:
@@ -275,7 +274,7 @@ def cpEM_BW(fluo, A_init, v_init, noise_init, pi0, w, estimate_noise=1, keep_pro
                         to_state = s[t+1][row]
                         event = a[r,t] + b[row,t+1] + A_log[to_state,from_state] + log_L_fluo(fluo=fluo_vec[t+1],
                                                 fluo_est=i[t+1][row], noise=noise)
-                        event_list.append(event-sp)
+                        event_list.append(event)
                         event_id.append(K*to_state+from_state)
         event_list = np.array(event_list)
         event_id = np.array(event_id)

@@ -15,7 +15,6 @@ def generate_traces_gill(memory, length, batch_size, noise_level, num_steps=1, r
                      + 1 * (i >= alpha) for i in xrange(memory)]
 
     else:
-
         alpha_vec = np.array([1.0]*memory)
     kernel = np.ones(memory)*alpha_vec
 
